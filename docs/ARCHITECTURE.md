@@ -6,6 +6,46 @@
 cpu_core -> memory_arbiter -> direct_mapped_cache -> main_memory
 ```
 
+## CPU/Cache Block Diagram
+
+```mermaid
+flowchart LR
+    subgraph CPU["cpu_core: 5-stage pipeline"]
+        IF["IF: PC + instruction fetch"]
+        IFID["IF/ID"]
+        ID["ID: decoder + register file + control"]
+        IDEX["ID/EX"]
+        EX["EX: ALU + branch decision"]
+        EXMEM["EX/MEM"]
+        MEM["MEM: load/store request"]
+        MEMWB["MEM/WB"]
+        WB["WB: register writeback"]
+
+        IF --> IFID --> ID --> IDEX --> EX --> EXMEM --> MEM --> MEMWB --> WB
+        WB --> ID
+    end
+
+    HDU["hazard_detection_unit"]
+    FWD["forwarding_unit"]
+    ARB["memory_arbiter\nMEM priority over IF"]
+    CACHE["direct_mapped_cache\n16 lines x 1 word\nwrite-through\nno-write-allocate"]
+    RAM["main_memory\nword-addressed\nartificial delay"]
+
+    IF -->|"IF req"| ARB
+    MEM -->|"MEM req"| ARB
+    ARB -->|"unified req"| CACHE
+    CACHE --> RAM
+    RAM --> CACHE
+    CACHE --> ARB
+    ARB -->|"instruction"| IF
+    ARB -->|"load data"| MEM
+
+    HDU -->|"stall / flush"| IF
+    HDU -->|"stall / flush"| IFID
+    HDU -->|"bubble"| IDEX
+    FWD -->|"forward select"| EX
+```
+
 The project implements a 16-bit, word-addressed, 5-stage pipelined CPU with a
 Von Neumann memory path. Instruction fetch and data memory access are separate
 logical CPU requests, but both are arbitrated onto one unified direct-mapped
