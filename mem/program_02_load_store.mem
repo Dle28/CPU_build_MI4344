@@ -1,0 +1,7 @@
+// Placeholder memory image for program_02_load_store.asm.
+// Generated .mem should be Verilog $readmemh compatible.
+@0000
+0000
+F000
+@0010
+0000

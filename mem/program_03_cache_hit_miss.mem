@@ -1,0 +1,7 @@
+// Placeholder memory image for program_03_cache_hit_miss.asm.
+// Expected final behavior: first load miss, second load hit.
+@0000
+0000
+F000
+@0010
+002A

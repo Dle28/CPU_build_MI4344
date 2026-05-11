@@ -1,0 +1,5 @@
+// Placeholder memory image for program_05_branch.asm.
+// Expected final behavior: taken BEQ flushes wrong-path ADDI.
+@0000
+0000
+F000

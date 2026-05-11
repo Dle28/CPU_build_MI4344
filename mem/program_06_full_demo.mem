@@ -1,0 +1,7 @@
+// Placeholder memory image for program_06_full_demo.asm.
+// Expected final behavior: arithmetic, memory, cache, hazard, branch.
+@0000
+0000
+F000
+@0010
+0000
