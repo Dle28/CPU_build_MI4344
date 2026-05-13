@@ -49,7 +49,7 @@ module id_ex_reg #(
     input  [2:0]            rs_in,
     input  [2:0]            rt_in,
     input  [2:0]            rd_in,
-    input  [2:0]            alu_op_in,
+    input  [3:0]            alu_op_in,
     input                   reg_write_in,
     input                   mem_read_in,
     input                   mem_write_in,
@@ -67,7 +67,7 @@ module id_ex_reg #(
     output reg [2:0]        rs_out,
     output reg [2:0]        rt_out,
     output reg [2:0]        rd_out,
-    output reg [2:0]        alu_op_out,
+    output reg [3:0]        alu_op_out,
     output reg              reg_write_out,
     output reg              mem_read_out,
     output reg              mem_write_out,
@@ -89,7 +89,7 @@ module id_ex_reg #(
             rs_out          <= 3'd0;
             rt_out          <= 3'd0;
             rd_out          <= 3'd0;
-            alu_op_out      <= 3'd0;
+            alu_op_out      <= 4'd0;
             reg_write_out   <= 1'b0;
             mem_read_out    <= 1'b0;
             mem_write_out   <= 1'b0;

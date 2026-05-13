@@ -820,7 +820,7 @@ Checklist:
 
 - [ ] Co `alu_tb.v`.
 - [ ] Co `register_file_tb.v`.
-- [ ] ALU co `zero`, `negative`, `overflow`.
+- [x] ALU co `zero`, `negative`, `overflow`.
 - [ ] `R0` luon bang 0.
 - [ ] Co mo ta ro `alu_op`.
 

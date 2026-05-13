@@ -1,12 +1,12 @@
-# Module Interface
+# Giao diện Module
 
-Signal naming convention:
+Quy ước đặt tên tín hiệu:
 
 ```text
 clk, rst, req, we, addr, wdata, rdata, ready, stall, flush, valid, hit, miss
 ```
 
-## Top-Level Path
+## Đường đi Top-Level
 
 ```text
 cpu_core
@@ -22,127 +22,119 @@ main_memory
 
 ## `cpu_cache_top`
 
-| Port | Direction | Description |
+| Cổng | Hướng | Mô tả |
 |---|---|---|
-| `clk` | input | system clock |
-| `rst` | input | synchronous reset |
-| `halted` | output | CPU has reached HALT |
-| `debug_pc` | output | current/debug PC |
+| `clk` | input | clock hệ thống |
+| `rst` | input | reset đồng bộ |
+| `halted` | output | CPU đã gặp HALT |
+| `debug_pc` | output | PC hiện tại (debug) |
 
 ## `cpu_core`
 
 IF logical port:
 
-| Port | Direction | Description |
+| Cổng | Hướng | Mô tả |
 |---|---|---|
-| `if_req` | output | instruction fetch request |
-| `if_addr` | output | word address |
-| `if_rdata` | input | fetched instruction word |
-| `if_ready` | input | fetch completed |
+| `if_req` | output | yêu cầu nạp lệnh |
+| `if_addr` | output | địa chỉ word |
+| `if_rdata` | input | word lệnh đọc về |
+| `if_ready` | input | hoàn tất nạp lệnh |
 
 MEM logical port:
 
-| Port | Direction | Description |
+| Cổng | Hướng | Mô tả |
 |---|---|---|
-| `mem_req` | output | load/store request |
-| `mem_we` | output | 1 for store, 0 for load |
-| `mem_addr` | output | word address |
-| `mem_wdata` | output | store data |
-| `mem_rdata` | input | load data |
-| `mem_ready` | input | memory operation completed |
+| `mem_req` | output | yêu cầu load/store |
+| `mem_we` | output | 1: store, 0: load |
+| `mem_addr` | output | địa chỉ word |
+| `mem_wdata` | output | dữ liệu store |
+| `mem_rdata` | input | dữ liệu load |
+| `mem_ready` | input | hoàn tất thao tác bộ nhớ |
 
 Debug/control:
 
-| Port | Direction | Description |
+| Cổng | Hướng | Mô tả |
 |---|---|---|
-| `halted` | output | HALT reached |
-| `debug_pc` | output | PC observation |
+| `halted` | output | đã gặp HALT |
+| `debug_pc` | output | quan sát PC |
 
-## CPU Submodules
+## Các module con CPU
 
-| Module | Main Ports | Role |
+| Module | Cổng chính | Vai trò |
 |---|---|---|
-| `pc_unit` | `stall`, `flush`, `target_pc`, `pc` | word-addressed PC update |
-| `instruction_decoder` | `instr`, `opcode`, `rs`, `rt`, `rd`, `funct`, `imm6`, `address` | field extraction |
-| `control_unit` | `opcode`, `funct`, control outputs | decode control generation |
-| `register_file` | `we`, `waddr`, `wdata`, read addresses/data | 8 x 16 register file with R0 rule |
-| `immediate_generator` | `imm6`, `address12`, expanded outputs | sign/zero extension |
-| `alu` | `a`, `b`, `alu_op`, `result`, `zero` | 16-bit ALU |
-| `forwarding_unit` | pipeline register destinations/sources | forwarding select generation |
-| `hazard_detection_unit` | cache/load/control hazard inputs | stall and flush generation |
-| `if_id_reg` | `stall`, `flush`, `valid`, `pc`, `instr` | IF/ID register |
-| `id_ex_reg` | data/control fields | ID/EX register |
-| `ex_mem_reg` | ALU/store/control fields | EX/MEM register |
-| `mem_wb_reg` | load/ALU/writeback fields | MEM/WB register |
-| `mux2`, `mux3` | data inputs/select/output | operand and forwarding muxes |
+| `instruction_decoder` | `instr` → `opcode/rs/rt/rd/funct/imm6/address` | tách trường lệnh |
+| `control_unit` | `opcode/funct` → control | sinh tín hiệu điều khiển |
+| `register_file` | `rs/rt` read async, `rd` write sync | regfile 8 x 16 với luật R0 |
+| `immediate_generator` | `imm6`, `sign_ext` → `imm16` | sign/zero extension |
+| `alu` | `a`, `b`, `alu_op[3:0]` | ALU 16-bit theo `cpu_defines.vh` |
+| `mux2to1` | `d0/d1/sel` | MUX 2-1 dùng cho ALUSrc, MemToReg |
+| `mux3to1` | `d0/d1/d2/sel[1:0]` | MUX 3-1 dùng cho forwarding |
+| `pipeline_regs` | `if_id_reg`, `id_ex_reg`, ... | thanh ghi pipeline (mục tiêu) |
+| `forwarding_unit` | selector forward | chống data hazard (mục tiêu) |
+| `hazard_detection_unit` | stall/flush | chống hazard (mục tiêu) |
+
+Lưu ý chuẩn hoá:
+
+- `alu_op` là 4-bit và khớp bảng mã trong `include/cpu_defines.vh`.
 
 ## `memory_arbiter`
 
-The arbiter accepts IF and MEM logical ports from `cpu_core` and drives one
-physical cache port.
+Arbiter nhận IF + MEM logical ports từ `cpu_core` và lái 1 cổng cache vật lý.
 
-Priority:
+Ưu tiên:
 
 ```text
 MEM request > IF request
 ```
 
-Cache-side ports:
+Cổng phía cache:
 
-| Port | Direction | Description |
+| Cổng | Hướng | Mô tả |
 |---|---|---|
 | `cache_req` | output | unified cache request |
 | `cache_we` | output | write enable |
-| `cache_addr` | output | word address |
-| `cache_wdata` | output | write data |
-| `cache_rdata` | input | read data |
-| `cache_ready` | input | cache operation complete |
+| `cache_addr` | output | địa chỉ word |
+| `cache_wdata` | output | dữ liệu ghi |
+| `cache_rdata` | input | dữ liệu đọc |
+| `cache_ready` | input | hoàn tất thao tác cache |
 
 ## `direct_mapped_cache`
 
-CPU/arbiter-side ports:
+Cổng phía CPU/arbiter:
 
-| Port | Direction | Description |
+| Cổng | Hướng | Mô tả |
 |---|---|---|
-| `req` | input | cache access request |
+| `req` | input | yêu cầu truy cập cache |
 | `we` | input | write enable |
-| `addr` | input | 16-bit word address |
-| `wdata` | input | write data |
-| `rdata` | output | read data |
-| `ready` | output | cache access complete |
-| `hit` | output | lookup hit |
-| `miss` | output | miss in progress |
+| `addr` | input | địa chỉ word 16-bit |
+| `wdata` | input | dữ liệu ghi |
+| `rdata` | output | dữ liệu đọc |
+| `ready` | output | hoàn tất |
+| `hit` | output | hit |
+| `miss` | output | miss |
 
-Memory-side ports:
+Cổng phía main memory:
 
-| Port | Direction | Description |
+| Cổng | Hướng | Mô tả |
 |---|---|---|
-| `mem_req` | output | RAM request |
-| `mem_we` | output | RAM write enable |
-| `mem_addr` | output | RAM word address |
-| `mem_wdata` | output | RAM write data |
-| `mem_rdata` | input | RAM read data |
-| `mem_ready` | input | delayed RAM complete |
+| `mem_req` | output | yêu cầu RAM |
+| `mem_we` | output | write enable RAM |
+| `mem_addr` | output | địa chỉ RAM |
+| `mem_wdata` | output | dữ liệu ghi RAM |
+| `mem_rdata` | input | dữ liệu đọc RAM |
+| `mem_ready` | input | hoàn tất RAM (có delay) |
 
-## `cache_controller`
-
-FSM control placeholder for:
-
-- lookup
-- hit read
-- hit write with write-through
-- read miss request/wait/refill
-- write miss request/wait without allocation
+Lưu ý: bản hiện tại của `direct_mapped_cache` vẫn đang pass-through (chưa có tag compare + refill + write policy hoàn chỉnh).
 
 ## `main_memory`
 
-| Port | Direction | Description |
+| Cổng | Hướng | Mô tả |
 |---|---|---|
-| `req` | input | memory request |
+| `req` | input | yêu cầu truy cập |
 | `we` | input | write enable |
-| `addr` | input | word address |
-| `wdata` | input | write data |
-| `rdata` | output | read data |
-| `ready` | output | delayed completion pulse |
+| `addr` | input | địa chỉ word |
+| `wdata` | input | dữ liệu ghi |
+| `rdata` | output | dữ liệu đọc |
+| `ready` | output | xung hoàn tất (sau delay) |
 
-Only one outstanding memory request is supported.
+Chỉ hỗ trợ tối đa 1 yêu cầu outstanding.

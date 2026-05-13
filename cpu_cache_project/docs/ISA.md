@@ -1,18 +1,18 @@
 # ISA
 
-## Global Rules
+## Quy tắc toàn cục
 
-| Feature | Decision |
+| Tính năng | Quyết định |
 |---|---|
-| Instruction width | 16 bits |
-| Data width | 16 bits |
-| Registers | 8 registers, `R0` to `R7` |
-| `R0` rule | Reads return `16'h0000`; writes are ignored |
-| Memory | 16-bit word-addressed |
+| Độ rộng lệnh | 16 bit |
+| Độ rộng dữ liệu | 16 bit |
+| Thanh ghi | 8 thanh ghi, `R0` đến `R7` |
+| Luật `R0` | Đọc luôn trả `16'h0000`; ghi bị bỏ qua |
+| Bộ nhớ | Word-addressed 16-bit |
 | PC increment | `PC = PC + 1` |
 | `NOP` | `16'h0000` |
 
-## Instruction Formats
+## Định dạng lệnh
 
 R-type:
 
@@ -40,9 +40,9 @@ J-type:
 [11:0]  address
 ```
 
-## Opcode Table
+## Bảng opcode
 
-| Opcode | Mnemonic | Type |
+| Opcode | Mnemonic | Loại |
 |---|---|---|
 | `4'h0` | R-type | R |
 | `4'h1` | `ADDI` | I |
@@ -53,9 +53,9 @@ J-type:
 | `4'h6` | `J` | J |
 | `4'hF` | `HALT` | J-like |
 
-## Funct Table
+## Bảng funct (R-type)
 
-R-type opcode is always `4'h0`.
+Opcode R-type luôn là `4'h0`.
 
 | Funct | Mnemonic |
 |---|---|
@@ -68,9 +68,9 @@ R-type opcode is always `4'h0`.
 | `3'h6` | `SLL` |
 | `3'h7` | `SRL` |
 
-## Assembly Operand Convention
+## Quy ước toán hạng Assembly
 
-Recommended assembly syntax:
+Cú pháp khuyến nghị:
 
 ```asm
 ADD  rd, rs, rt
@@ -83,29 +83,28 @@ J    label
 HALT
 ```
 
-## Branch Target Rule
+## Quy tắc địa chỉ nhánh (Branch)
 
-Branches are resolved in EX.
+Nhánh được resolve ở EX (mục tiêu pipeline). Địa chỉ nhánh:
 
 ```text
 branch_target = PC_plus_1 + sign_extend(imm6)
 ```
 
-The assembler should encode label branches as:
+Assembler nên mã hoá nhãn nhánh theo:
 
 ```text
 imm6 = label_address - (branch_pc + 1)
 ```
 
-## Jump Target Rule
+## Quy tắc địa chỉ nhảy (Jump)
 
-Jump uses the 12-bit absolute word address field.
+Jump dùng địa chỉ tuyệt đối 12-bit (word address):
 
 ```text
 jump_target = zero_extend(address[11:0])
 ```
 
-## Shift Rule
+## Quy tắc shift
 
-`SLL` and `SRL` use the low bits of the `rt` operand as the shift amount. No
-separate shift-immediate instruction exists in the locked ISA.
+`SLL` và `SRL` dùng các bit thấp của toán hạng `rt` làm số lần dịch. Không có lệnh shift-immediate riêng trong ISA locked.

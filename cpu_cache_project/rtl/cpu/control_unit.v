@@ -12,10 +12,13 @@ module control_unit (
     output reg   branch_ne,
     output reg   jump,
     output reg   alu_src_imm,
+    output reg   sign_ext,
     output reg   mem_to_reg,
     output reg   halt,
-    output reg [2:0] alu_op
+    output reg [3:0] alu_op
 );
+
+    `include "cpu_defines.vh"
 
     localparam OP_RTYPE = 4'h0;
     localparam OP_ADDI  = 4'h1;
@@ -26,9 +29,6 @@ module control_unit (
     localparam OP_J     = 4'h6;
     localparam OP_HALT  = 4'hF;
 
-    localparam ALU_ADD  = 3'h0;
-    localparam ALU_SUB  = 3'h1;
-
     always @(*) begin
         reg_write   = 1'b0;
         mem_read    = 1'b0;
@@ -37,39 +37,45 @@ module control_unit (
         branch_ne   = 1'b0;
         jump        = 1'b0;
         alu_src_imm = 1'b0;
+        sign_ext    = `EXT_ZERO;
         mem_to_reg  = 1'b0;
         halt        = 1'b0;
-        alu_op      = ALU_ADD;
+        alu_op      = `ALU_ADD;
 
         case (opcode)
             OP_RTYPE: begin
                 reg_write = 1'b1;
-                alu_op    = funct;
+                alu_op    = {1'b0, funct};
             end
             OP_ADDI: begin
                 reg_write   = 1'b1;
                 alu_src_imm = 1'b1;
-                alu_op      = ALU_ADD;
+                sign_ext    = `EXT_SIGN;
+                alu_op      = `ALU_ADD;
             end
             OP_LW: begin
                 reg_write   = 1'b1;
                 mem_read    = 1'b1;
                 alu_src_imm = 1'b1;
                 mem_to_reg  = 1'b1;
-                alu_op      = ALU_ADD;
+                sign_ext    = `EXT_SIGN;
+                alu_op      = `ALU_ADD;
             end
             OP_SW: begin
                 mem_write   = 1'b1;
                 alu_src_imm = 1'b1;
-                alu_op      = ALU_ADD;
+                sign_ext    = `EXT_SIGN;
+                alu_op      = `ALU_ADD;
             end
             OP_BEQ: begin
                 branch_eq = 1'b1;
-                alu_op    = ALU_SUB;
+                sign_ext  = `EXT_SIGN;
+                alu_op    = `ALU_SUB;
             end
             OP_BNE: begin
                 branch_ne = 1'b1;
-                alu_op    = ALU_SUB;
+                sign_ext  = `EXT_SIGN;
+                alu_op    = `ALU_SUB;
             end
             OP_J: begin
                 jump = 1'b1;

@@ -1,55 +1,55 @@
-# Report Outline
+# Dàn ý báo cáo
 
-## 1. Introduction
+## 1. Giới thiệu
 
-- Project goal
-- Educational scope
-- Locked architecture summary
+- Mục tiêu dự án
+- Phạm vi học thuật
+- Tóm tắt kiến trúc locked
 
-## 2. ISA Design
+## 2. Thiết kế ISA
 
-- Instruction formats
-- Opcode/funct tables
-- Register file and R0 rule
-- Branch and jump target rules
+- Định dạng lệnh
+- Bảng opcode/funct
+- Regfile và luật R0
+- Quy tắc địa chỉ branch/jump
 
 ## 3. Datapath
 
-- 5-stage pipeline
+- Pipeline 5 tầng (mục tiêu)
 - Pipeline registers
-- ALU and register file
-- Control signal flow
+- ALU và register file
+- Luồng tín hiệu điều khiển
 
-## 4. Hazard Handling
+## 4. Xử lý hazard
 
 - Forwarding paths
 - Load-use stall
 - Branch/jump flush
-- Global cache miss stall
+- Global stall khi cache miss
 
-## 5. Memory System
+## 5. Hệ thống bộ nhớ
 
 - Von Neumann unified memory path
-- Arbiter priority
+- Quy tắc ưu tiên của arbiter
 - Direct-mapped cache
-- Delayed main memory
+- Main memory có delay
 
-## 6. Verification
+## 6. Kiểm thử
 
-- Unit testbenches
-- Integration tests
-- Assembly demo programs
-- Waveform evidence
+- Testbench từng module
+- Test tích hợp
+- Chương trình demo assembly
+- Minh chứng waveform
 
-## 7. Results
+## 7. Kết quả
 
-- Correctness summary
-- Cache hit/miss examples
-- Stall/flush examples
-- Limitations
+- Tóm tắt tính đúng
+- Ví dụ hit/miss cache
+- Ví dụ stall/flush
+- Giới hạn hiện tại
 
-## 8. Conclusion
+## 8. Kết luận
 
-- What was implemented
-- What was learned
-- Possible future extensions outside locked scope
+- Những gì đã triển khai
+- Bài học rút ra
+- Hướng phát triển ngoài phạm vi locked

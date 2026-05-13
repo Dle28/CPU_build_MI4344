@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# tick: đã xong
 """Skeleton assembler for the locked 16-bit CPU ISA.
 
 Usage:
