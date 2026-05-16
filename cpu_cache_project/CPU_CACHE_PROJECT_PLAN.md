@@ -935,7 +935,7 @@ Cong viec:
 | Chot ISA 16-bit | Ca nhom |
 | Chot opcode/funct | Thanh vien 3 + 4 |
 | Chot interface module | Ca nhom |
-| Ve so do CPU/cache | Thanh vien 3 |
+| Ve so do CPU/cache | Thanh vien 3 | - chưa có
 | Tao repo Git | Thanh vien 4 |
 | Tao skeleton file Verilog | Thanh vien 3 |
 | Tao format test program | Thanh vien 4 |

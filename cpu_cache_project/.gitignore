@@ -4,6 +4,12 @@ build/
 *.vcd
 *.gtkw
 
+# Assembly and Memory files
+asm/
+mem/
+*.asm
+*.mem
+
 # Python cache
 __pycache__/
 *.pyc

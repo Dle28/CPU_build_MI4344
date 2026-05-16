@@ -1,9 +1,0 @@
-// Memory image: arithmetic smoke test (hand-encoded)
-// Expected:
-//   R1=5, R2=3, R3=8, R4=3 then HALT
-@0000
-1045
-1083
-0298
-0661
-F000
