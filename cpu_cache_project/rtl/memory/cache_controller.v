@@ -1,124 +1,99 @@
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
 
-// Cache controller FSM skeleton for the unified direct-mapped cache.
-// The direct_mapped_cache module owns tag/data/valid arrays; this controller
-// will eventually sequence lookup, refill, write-through, and no-write-allocate.
 module cache_controller (
-    input        clk,
-    input        rst,
-    input        req,
-    input        we,
-    input        hit,
-    input        mem_ready,
-    output reg   ready,
-    output reg   mem_req,
-    output reg   mem_we,
-    output reg   refill,
-    output reg   miss,
-    output reg [3:0] state
+    input  wire        clk,
+    input  wire        rst_n,
+    
+    // Giao tiếp với CPU (qua Arbiter)
+    input  wire [15:0] cpu_addr,
+    input  wire [15:0] cpu_wdata,
+    input  wire        cpu_read,
+    input  wire        cpu_write,
+    output reg  [15:0] cpu_rdata,
+    output reg         cpu_stall,
+    
+    // Giao tiếp với mảng lưu trữ Cache (gắn sang file direct_mapped_cache.v)
+    output wire [3:0]  cache_index,
+    output wire [11:0] cache_tag,
+    output reg         cache_we,
+    output reg  [15:0] cache_wdata,
+    input  wire        cache_hit,
+    input  wire [15:0] cache_rdata,
+    
+    // Giao tiếp với Main Memory
+    output reg  [15:0] mem_addr,
+    output reg  [15:0] mem_wdata,
+    output reg         mem_read,
+    output reg         mem_write,
+    input  wire [15:0] mem_rdata,
+    input  wire        mem_ready
 );
 
-    localparam IDLE            = 4'd0;
-    localparam LOOKUP          = 4'd1;
-    localparam HIT_READ        = 4'd2;
-    localparam HIT_WRITE       = 4'd3;
-    localparam MISS_READ_REQ   = 4'd4;
-    localparam MISS_READ_WAIT  = 4'd5;
-    localparam REFILL          = 4'd6;
-    localparam MISS_WRITE_REQ  = 4'd7;
-    localparam MISS_WRITE_WAIT = 4'd8;
-    localparam DONE            = 4'd9;
+    // Bẻ nhánh địa chỉ CPU sang cho mảng Cache phân tích
+    assign cache_index = cpu_addr[3:0];
+    assign cache_tag   = cpu_addr[15:4];
 
-    always @(posedge clk) begin
-        if (rst) begin
-            state <= IDLE;
-        end else begin
-            case (state)
-                IDLE: begin
-                    if (req) begin
-                        state <= LOOKUP;
-                    end
-                end
-                LOOKUP: begin
-                    if (hit && !we) begin
-                        state <= HIT_READ;
-                    end else if (hit && we) begin
-                        state <= HIT_WRITE;
-                    end else if (!hit && !we) begin
-                        state <= MISS_READ_REQ;
-                    end else begin
-                        state <= MISS_WRITE_REQ;
-                    end
-                end
-                HIT_READ: begin
-                    state <= DONE;
-                end
-                HIT_WRITE: begin
-                    state <= MISS_WRITE_WAIT;
-                end
-                MISS_READ_REQ: begin
-                    state <= MISS_READ_WAIT;
-                end
-                MISS_READ_WAIT: begin
-                    if (mem_ready) begin
-                        state <= REFILL;
-                    end
-                end
-                REFILL: begin
-                    state <= DONE;
-                end
-                MISS_WRITE_REQ: begin
-                    state <= MISS_WRITE_WAIT;
-                end
-                MISS_WRITE_WAIT: begin
-                    if (mem_ready) begin
-                        state <= DONE;
-                    end
-                end
-                DONE: begin
-                    state <= IDLE;
-                end
-                default: begin
-                    state <= IDLE;
-                end
-            endcase
-        end
+    // Khai báo FSM
+    localparam IDLE     = 1'b0;
+    localparam WAIT_MEM = 1'b1;
+    reg state, next_state;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) state <= IDLE;
+        else        state <= next_state;
     end
 
+    // Logic điều khiển trung tâm
     always @(*) begin
-        ready   = 1'b0;
-        mem_req = 1'b0;
-        mem_we  = 1'b0;
-        refill  = 1'b0;
-        miss    = 1'b0;
+        next_state  = state;
+        cpu_stall   = 1'b0;
+        cache_we    = 1'b0;
+        cache_wdata = 16'd0;
+        mem_read    = 1'b0;
+        mem_write   = 1'b0;
+        mem_addr    = cpu_addr;
+        mem_wdata   = cpu_wdata;
+        cpu_rdata   = 16'd0;
 
         case (state)
-            HIT_READ: begin
-                ready = 1'b1;
+            IDLE: begin
+                if (cpu_read) begin
+                    if (cache_hit) begin
+                        cpu_rdata  = cache_rdata; // Read Hit: Lấy dữ liệu luôn, ko stall
+                    end else begin
+                        cpu_stall  = 1'b1;         // Read Miss: Bắt đầu stall CPU
+                        mem_read   = 1'b1;         // Gọi bộ nhớ chính
+                        next_state = WAIT_MEM;
+                    end
+                end 
+                else if (cpu_write) begin
+                    cpu_stall  = 1'b1;             // Write-through: Luôn stall để ghi xuống Mem
+                    mem_write  = 1'b1;
+                    next_state = WAIT_MEM;
+                end
             end
-            HIT_WRITE: begin
-                mem_req = 1'b1;
-                mem_we  = 1'b1;
-            end
-            MISS_READ_REQ,
-            MISS_READ_WAIT: begin
-                mem_req = 1'b1;
-                mem_we  = 1'b0;
-                miss    = 1'b1;
-            end
-            REFILL: begin
-                refill = 1'b1;
-            end
-            MISS_WRITE_REQ,
-            MISS_WRITE_WAIT: begin
-                mem_req = 1'b1;
-                mem_we  = 1'b1;
-                miss    = 1'b1;
-            end
-            DONE: begin
-                ready = 1'b1;
-            end
-            default: begin
+
+            WAIT_MEM: begin
+                cpu_stall = 1'b1;                  // Giữ trạng thái stall CPU
+                if (mem_ready) begin
+                    next_state = IDLE;
+                    if (cpu_read) begin
+                        cpu_rdata = mem_rdata;
+                        cache_we  = 1'b1;          // Read Miss xong -> nạp vào Cache
+                        cache_wdata = mem_rdata;
+                    end 
+                    else if (cpu_write) begin
+                        // Write-through + No-write-allocate:
+                        // Chỉ cập nhật Cache nếu trước đó đã HIT. Nếu MISS thì bỏ qua.
+                        if (cache_hit) begin
+                            cache_we    = 1'b1;
+                            cache_wdata = cpu_wdata;
+                        end
+                    end
+                end else begin
+                    mem_read  = cpu_read;
+                    mem_write = cpu_write;
+                end
             end
         endcase
     end
