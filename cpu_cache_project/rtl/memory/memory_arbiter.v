@@ -1,47 +1,46 @@
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
 
-// Arbiter for Von Neumann unified cache access.
-// MEM-stage requests have priority over IF-stage fetch requests.
-module memory_arbiter #(
-    parameter DATA_WIDTH = 16,
-    parameter ADDR_WIDTH = 16
-) (
-    input                   clk,
-    input                   rst,
+module memory_arbiter (
+    // Giao tiếp với tầng IF (Instruction Fetch) của CPU
+    input  wire [15:0] if_addr,
+    input  wire        if_read,
+    output wire [15:0] if_rdata,
+    output wire        if_stall,
 
-    input                   if_req,
-    input  [ADDR_WIDTH-1:0] if_addr,
-    output [DATA_WIDTH-1:0] if_rdata,
-    output                  if_ready,
+    // Giao tiếp với tầng MEM (Data Memory) của CPU
+    input  wire [15:0] mem_addr,
+    input  wire [15:0] mem_wdata,
+    input  wire        mem_read,
+    input  wire        mem_write,
+    output wire [15:0] mem_rdata,
+    output wire        mem_stall,
 
-    input                   mem_req,
-    input                   mem_we,
-    input  [ADDR_WIDTH-1:0] mem_addr,
-    input  [DATA_WIDTH-1:0] mem_wdata,
-    output [DATA_WIDTH-1:0] mem_rdata,
-    output                  mem_ready,
-
-    output                  cache_req,
-    output                  cache_we,
-    output [ADDR_WIDTH-1:0] cache_addr,
-    output [DATA_WIDTH-1:0] cache_wdata,
-    input  [DATA_WIDTH-1:0] cache_rdata,
-    input                   cache_ready
+    // Giao tiếp với Cache
+    output wire [15:0] cache_addr,
+    output wire [15:0] cache_wdata,
+    output wire        cache_read,
+    output wire        cache_write,
+    input  wire [15:0] cache_rdata,
+    input  wire        cache_stall
 );
 
-    // TODO: latch request owner while cache transaction is outstanding.
-    // Current placeholder assumes request remains stable until cache_ready.
-    assign cache_req   = mem_req | if_req;
-    assign cache_we    = mem_req ? mem_we : 1'b0;
-    assign cache_addr  = mem_req ? mem_addr : if_addr;
-    assign cache_wdata = mem_req ? mem_wdata : {DATA_WIDTH{1'b0}};
+    // Ưu tiên tầng MEM nếu nó có yêu cầu đọc hoặc ghi
+    wire mem_request = mem_read | mem_write;
 
-    assign mem_rdata   = cache_rdata;
-    assign if_rdata    = cache_rdata;
-    assign mem_ready   = mem_req & cache_ready;
-    assign if_ready    = (~mem_req) & if_req & cache_ready;
+    // Định tuyến tín hiệu đến Cache
+    assign cache_addr  = mem_request ? mem_addr  : if_addr;
+    assign cache_wdata = mem_request ? mem_wdata : 16'd0;
+    assign cache_read  = mem_request ? mem_read  : if_read;
+    assign cache_write = mem_request ? mem_write : 1'b0;
 
-    wire unused_clk = clk;
-    wire unused_rst = rst;
+    // Dữ liệu từ Cache trả về cho cả 2 tầng (tầng nào đang request thì tự lấy)
+    assign mem_rdata = cache_rdata;
+    assign if_rdata  = cache_rdata;
+
+    // Logic sinh tín hiệu Stall (bắt CPU dừng)
+    // - Tầng MEM chỉ bị stall khi Cache báo stall.
+    // - Tầng IF bị stall khi Cache báo stall HOẶC khi bị tầng MEM giành quyền.
+    assign mem_stall = mem_request & cache_stall;
+    assign if_stall  = (if_read & mem_request) | (if_read & cache_stall);
 
 endmodule
