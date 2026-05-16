@@ -69,7 +69,7 @@ không allocate line trong cache
 ready khi ghi RAM hoàn tất
 ```
 
-## Các trạng thái FSM (mục tiêu)
+## Các trạng thái FSM
 
 | State | Mục đích |
 |---|---|
@@ -93,5 +93,5 @@ ready khi ghi RAM hoàn tất
 
 ## Trạng thái hiện tại
 
-- Module cache hiện tại đang pass-through tới `main_memory` để bring-up đường dữ liệu.
-- FSM đúng theo tài liệu này là mục tiêu cho giai đoạn tiếp theo.
+- Module cache hiện tại đã được triển khai đầy đủ theo FSM này.
+- Cache đã pass 100% các bài kiểm thử (`cache_tb.v`) bao gồm cả Write-through, No-write-allocate, Read hit, Read miss (refill), và tích hợp ổn định vào CPU Pipeline.

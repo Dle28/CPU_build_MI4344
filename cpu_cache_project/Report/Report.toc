@@ -1,0 +1,76 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{Tóm tắt đóng góp của các thành viên}{1}{Doc-Start}%
+\contentsline {section}{\numberline {1}Giới thiệu đề tài}{5}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Bối cảnh đề tài}{5}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Tổng quan đề tài}{6}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Mục tiêu đề tài}{7}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Thông tin cần kiểm chứng và nguồn trích dẫn}{8}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Phạm vi thực hiện}{9}{subsection.1.5}%
+\contentsline {section}{\numberline {2}Phương pháp luận}{9}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Cơ sở lý thuyết nền tảng}{9}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Kiến trúc Von Neumann}{9}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}CPU 16-bit}{10}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Pipeline 5 tầng}{10}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.4}Instruction Set Architecture --- ISA}{11}{subsubsection.2.1.4}%
+\contentsline {paragraph}{Định dạng lệnh}{11}{table.5}%
+\contentsline {paragraph}{Opcode}{12}{table.6}%
+\contentsline {paragraph}{Funct và mã ALU}{12}{table.7}%
+\contentsline {paragraph}{Chi tiết hoạt động ALU}{13}{table.8}%
+\contentsline {paragraph}{Quy ước assembly}{13}{table.9}%
+\contentsline {paragraph}{Branch, jump và halt}{13}{table.10}%
+\contentsline {paragraph}{Cờ trạng thái ALU}{14}{table.10}%
+\contentsline {subsubsection}{\numberline {2.1.5}Cấu trúc Tổng thể Đường ống Dữ liệu (Datapath)}{14}{subsubsection.2.1.5}%
+\contentsline {subsubsection}{\numberline {2.1.6}Khối Tính toán Trung tâm (ALU)}{15}{subsubsection.2.1.6}%
+\contentsline {subsubsection}{\numberline {2.1.7}Tập thanh ghi (Register File)}{16}{subsubsection.2.1.7}%
+\contentsline {subsubsection}{\numberline {2.1.8}Control Unit}{17}{subsubsection.2.1.8}%
+\contentsline {subsubsection}{\numberline {2.1.9}Cache Memory}{17}{subsubsection.2.1.9}%
+\contentsline {subsubsection}{\numberline {2.1.10}Main Memory có Delay}{18}{subsubsection.2.1.10}%
+\contentsline {subsubsection}{\numberline {2.1.11}Hazard trong Pipeline}{18}{subsubsection.2.1.11}%
+\contentsline {paragraph}{Structural Hazard}{18}{subsubsection.2.1.11}%
+\contentsline {paragraph}{Data Hazard}{18}{subsubsection.2.1.11}%
+\contentsline {paragraph}{Load-use Hazard}{18}{subsubsection.2.1.11}%
+\contentsline {paragraph}{Control Hazard}{18}{subsubsection.2.1.11}%
+\contentsline {subsection}{\numberline {2.2}Phân tích yêu cầu hệ thống}{19}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Yêu cầu chức năng}{19}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Yêu cầu phi chức năng}{19}{subsubsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.3}Thiết kế hệ thống}{19}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Tổng quan kiến trúc hệ thống}{19}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Luồng pipeline và xử lý xung đột}{20}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Tổng quan giao diện module}{21}{subsubsection.2.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.4}Ghi chú phạm vi thiết kế}{21}{subsubsection.2.3.4}%
+\contentsline {subsubsection}{\numberline {2.3.5}Kiến trúc tổng thể}{22}{subsubsection.2.3.5}%
+\contentsline {subsubsection}{\numberline {2.3.6}Thiết kế module CPU Core}{22}{subsubsection.2.3.6}%
+\contentsline {subsubsection}{\numberline {2.3.7}Thiết kế Datapath \& ALU}{23}{subsubsection.2.3.7}%
+\contentsline {subsubsection}{\numberline {2.3.8}Thiết kế Control Unit}{23}{subsubsection.2.3.8}%
+\contentsline {subsubsection}{\numberline {2.3.9}Thiết kế Pipeline Registers}{23}{subsubsection.2.3.9}%
+\contentsline {subsubsection}{\numberline {2.3.10}Thiết kế Hazard Detection \& Forwarding}{23}{subsubsection.2.3.10}%
+\contentsline {subsubsection}{\numberline {2.3.11}Thiết kế Memory Arbiter}{24}{subsubsection.2.3.11}%
+\contentsline {subsubsection}{\numberline {2.3.12}Thiết kế Direct-Mapped Cache}{24}{subsubsection.2.3.12}%
+\contentsline {subsubsection}{\numberline {2.3.13}Thiết kế Main Memory}{25}{subsubsection.2.3.13}%
+\contentsline {subsubsection}{\numberline {2.3.14}Thiết kế Python Assembler}{25}{subsubsection.2.3.14}%
+\contentsline {subsection}{\numberline {2.4}Quá trình xây dựng hệ thống}{27}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Quy trình triển khai}{27}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Xây dựng Datapath, ALU, Register File}{27}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Xây dựng Cache, RAM và Memory Arbiter}{27}{subsubsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {2.4.4}Xây dựng Control, Pipeline và CPU Core}{28}{subsubsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {2.4.5}Xây dựng Testbench, Assembler và Demo Program}{29}{subsubsection.2.4.5}%
+\contentsline {section}{\numberline {3}Kết quả và bàn luận}{30}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Chiến lược kiểm thử}{30}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Testbench từng module}{30}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Kiểm thử chương trình Assembly}{30}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Waveform minh họa}{32}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Bảng tổng hợp kết quả kiểm thử}{32}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Đánh giá hệ thống}{33}{subsection.3.6}%
+\contentsline {subsubsection}{\numberline {3.6.1}Kết quả đạt được}{33}{subsubsection.3.6.1}%
+\contentsline {subsubsection}{\numberline {3.6.2}Hạn chế}{33}{subsubsection.3.6.2}%
+\contentsline {subsubsection}{\numberline {3.6.3}Hướng phát triển}{34}{subsubsection.3.6.3}%
+\contentsline {subsection}{\numberline {3.7}Kết luận}{34}{subsection.3.7}%
+\contentsline {section}{\numberline {4}Tài liệu tham khảo}{34}{section.4}%
+\contentsline {section}{\numberline {5}Phụ lục}{35}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Cấu trúc thư mục project}{35}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Lệnh mô phỏng}{35}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Code quan trọng}{36}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Gợi ý chia file trong thư mục docs/}{36}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Checklist hoàn thành báo cáo}{37}{subsection.5.5}%
+\contentsline {paragraph}{Checklist chi tiết}{37}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Lưu ý khi viết báo cáo}{39}{subsection.5.6}%

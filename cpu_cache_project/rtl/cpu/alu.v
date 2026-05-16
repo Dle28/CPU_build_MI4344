@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 // ============================================================================
 // FILE: rtl/cpu/alu.v
 // CHỨC NĂNG: Khối tính toán trung tâm (Arithmetic Logic Unit)

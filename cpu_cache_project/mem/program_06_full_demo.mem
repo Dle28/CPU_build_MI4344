@@ -1,7 +1,14 @@
-// Placeholder memory image for program_06_full_demo.asm.
-// Expected final behavior: arithmetic, memory, cache, hazard, branch.
 @0000
-0000
+1050
+1084
+10C6
+04E0
+3300
+2340
+2380
+0BB8
+4B81
+11DF
 F000
 @0010
 0000

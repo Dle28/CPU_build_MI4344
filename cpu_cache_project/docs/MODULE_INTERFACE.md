@@ -69,9 +69,9 @@ Debug/control:
 | `alu` | `a`, `b`, `alu_op[3:0]` | ALU 16-bit theo `cpu_defines.vh` |
 | `mux2to1` | `d0/d1/sel` | MUX 2-1 dùng cho ALUSrc, MemToReg |
 | `mux3to1` | `d0/d1/d2/sel[1:0]` | MUX 3-1 dùng cho forwarding |
-| `pipeline_regs` | `if_id_reg`, `id_ex_reg`, ... | thanh ghi pipeline (mục tiêu) |
-| `forwarding_unit` | selector forward | chống data hazard (mục tiêu) |
-| `hazard_detection_unit` | stall/flush | chống hazard (mục tiêu) |
+| `pipeline_regs` | `if_id_reg`, `id_ex_reg`, ... | thanh ghi pipeline |
+| `forwarding_unit` | selector forward | chống data hazard |
+| `hazard_detection_unit` | stall/flush | chống hazard |
 
 Lưu ý chuẩn hoá:
 
@@ -124,7 +124,7 @@ Cổng phía main memory:
 | `mem_rdata` | input | dữ liệu đọc RAM |
 | `mem_ready` | input | hoàn tất RAM (có delay) |
 
-Lưu ý: bản hiện tại của `direct_mapped_cache` vẫn đang pass-through (chưa có tag compare + refill + write policy hoàn chỉnh).
+Lưu ý: `direct_mapped_cache` đã hoàn thiện các tính năng FSM, tag compare, refill và write-through policy theo đúng đặc tả.
 
 ## `main_memory`
 

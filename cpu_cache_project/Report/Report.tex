@@ -1,0 +1,1495 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+
+% Encoding and language
+\usepackage[T5]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese,english]{babel}
+
+% Core math
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+\usepackage{bm}
+
+% Figures, tables, and layout
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+\usepackage{etoolbox}
+\usepackage{setspace}
+% Bảng longtblr dùng single spacing dù body là doublespacing
+\AtBeginEnvironment{longtblr}{\singlespacing}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage{tikz-cd}
+
+% Colors and links
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue!60!black,
+	citecolor=teal!50!black,
+	urlcolor=magenta!60!black,
+	pdftitle={MI4344},
+	pdfauthor={YAG}
+}
+
+% Bibliography and units
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{siunitx}
+\sisetup{separate-uncertainty=true}
+
+% Lists and captions
+\usepackage{enumitem}
+\usepackage[font=small,labelfont=bf]{caption}
+\setlist{itemsep=0.25em,topsep=0.4em}
+
+% Code listings
+\usepackage{listings}
+
+% Paragraphs and report-like spacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6\baselineskip}
+\setstretch{1.5}
+\sloppy
+\hbadness=10000
+\emergencystretch=3em
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{14pt}
+
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.75}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection.}{0.6em}{}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+% Common commands
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\diff}{\mathop{}\!\mathrm{d}}
+
+\newcommand{\checkbox}{\ensuremath{\square}}
+\newcommand{\checkedbox}{\ensuremath{\boxtimes}}
+
+% Verilog listing definition
+\definecolor{codebg}{RGB}{248,249,250}
+\definecolor{codeframe}{RGB}{220,223,230}
+\definecolor{codekw}{RGB}{0,92,197}
+\definecolor{codecomment}{RGB}{0,128,96}
+\definecolor{codestring}{RGB}{163,21,21}
+\definecolor{codenumber}{RGB}{120,120,120}
+
+\lstdefinelanguage{Verilog}{
+	morekeywords={module,endmodule,input,output,inout,wire,reg,logic,assign,always,begin,end,if,else,case,endcase,for,generate,endgenerate,parameter,localparam,posedge,negedge,or,and,xor,not,nand,nor,xnor,initial,function,endfunction,task,endtask,integer,genvar},
+	sensitive=true,
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]"
+}
+
+\lstdefinestyle{verilogstyle}{
+	language=Verilog,
+	backgroundcolor=\color{codebg},
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{codekw}\bfseries,
+	commentstyle=\color{codecomment}\itshape,
+	stringstyle=\color{codestring},
+	numbers=left,
+	numberstyle=\scriptsize\color{codenumber},
+	stepnumber=1,
+	numbersep=10pt,
+	showstringspaces=false,
+	breaklines=true,
+	breakatwhitespace=true,
+	columns=fullflexible,
+	keepspaces=true,
+	frame=single,
+	rulecolor=\color{codeframe},
+	framesep=6pt,
+	frameround=tttt,
+	tabsize=2,
+	captionpos=b
+}
+
+\lstset{style=verilogstyle}
+
+\title{MI4344}
+\author{YAG}
+\date{\today}
+
+\begin{document}
+	
+	\begin{titlepage}
+		\centering
+		{\large \textbf{BÁO CÁO PROJECT}}\\[1.5cm]
+		{\Large \textbf{Xây dựng CPU Von Neumann Pipeline 5 tầng kết hợp Unified Cache}}\\[1cm]
+		{\LARGE \textbf{Thiết kế và mô phỏng CPU 16-bit kiến trúc Von Neumann Pipeline 5 tầng kết hợp Unified Direct-Mapped Cache}}\\[2cm]
+		
+		\begin{tabular}{>{\bfseries}p{4cm}p{10cm}}
+			Tên đề tài: & Thiết kế và mô phỏng CPU 16-bit kiến trúc Von Neumann Pipeline 5 tầng kết hợp Unified Direct-Mapped Cache \\
+			Nhóm thực hiện: & Ghi đầy đủ tên 4 thành viên \\
+			Môn học: & Kiến trúc máy tính / Thiết kế hệ thống số / Verilog HDL \\
+			Giảng viên hướng dẫn: & \dotfill \\
+			Thời gian: & \dotfill \\
+		\end{tabular}
+		
+		\vfill
+		{\large \today}
+	\end{titlepage}
+	
+	\newpage
+	\section*{Tóm tắt đóng góp của các thành viên}
+	\addcontentsline{toc}{section}{Tóm tắt đóng góp của các thành viên}
+	Báo cáo được định dạng theo tinh thần paper chuẩn APA với trang bìa, căn lề 1 inch, đánh số trang và bố cục nội dung học thuật; phần trích dẫn và tài liệu tham khảo sử dụng kiểu đánh số tương tự IEEE numerical citation style \cite{apaformat,ieeestyle}. Mức độ đóng góp dưới đây được sắp xếp từ cao đến thấp, dựa trên vai trò tích hợp hệ thống, khối lượng thiết kế, mức độ ảnh hưởng đến kiến trúc cuối cùng và phần kiểm chứng.
+	
+	\begin{enumerate}
+		\item \textbf{Nguyễn Nhật Phong --- Control Unit \& System Integrator.} Phụ trách chính việc xác định kiến trúc CPU 16-bit, tổ chức pipeline 5 tầng, thiết kế ISA, control unit, hazard detection, forwarding, stall và flush. Thành viên này cũng đảm nhiệm vai trò tích hợp các khối datapath, memory subsystem và testbench thành hệ thống hoàn chỉnh, đồng thời tổng hợp các phần giới thiệu, yêu cầu hệ thống, kiến trúc tổng thể, đánh giá và kết luận.
+		\item \textbf{Nguyễn Vũ Hoàng --- Memory \& Cache Specialist.} Phụ trách thiết kế unified direct-mapped cache, main memory có delay và memory arbiter để xử lý tranh chấp truy cập giữa IF stage và MEM stage. Đóng góp chính gồm mô tả cache hit/miss, read miss refill, write-through, no-write-allocate, FSM cache và kiểm thử các trường hợp read/write với RAM có độ trễ.
+		\item \textbf{Vũ Xuân Hải --- Datapath \& ALU Designer.} Phụ trách thiết kế datapath, ALU, register file, immediate generator và các MUX chọn toán hạng. Đóng góp tập trung vào việc mô tả đường đi dữ liệu qua các stage, kiểm soát thanh ghi \texttt{R0}, các phép toán số học/logic và kiểm thử ALU/register file.
+		\item \textbf{Lê Hoàng Dũng --- Verification \& Tooling Engineer.} Phụ trách assembler Python, demo program, testbench, waveform và bảng pass/fail. Đóng góp chính gồm chuyển assembly sang file \texttt{.mem}, xây dựng kịch bản kiểm thử module/tích hợp, mô tả kết quả simulation và chuẩn bị phụ lục về cấu trúc thư mục, lệnh mô phỏng và kế hoạch làm việc.
+	\end{enumerate}
+	
+	Tổng thể, nhóm phân công theo hướng mỗi thành viên chịu trách nhiệm một lớp của hệ thống: điều khiển và tích hợp, bộ nhớ/cache, datapath/ALU, và verification/tooling. Cách phân chia này giúp quá trình phát triển bám sát luồng thiết kế phần cứng hiện đại: xác định ISA, thiết kế module, mô phỏng từng khối, tích hợp pipeline, kiểm thử hazard/cache và đánh giá kết quả.
+	
+	\newpage
+	\tableofcontents
+	\newpage
+	
+	\section{Giới thiệu đề tài}
+	\textbf{Người viết chính:} Lê Hoàng Dũng
+	
+	\subsection{Bối cảnh đề tài}
+	Bộ xử lý trung tâm (CPU) đóng vai trò cốt lõi trong việc thực thi chương trình và điều phối luồng dữ liệu của hệ thống máy tính. Trong kiến trúc máy tính hiện đại, việc mô hình hóa CPU thông qua mối tương quan giữa tập lệnh, đường dẫn dữ liệu (datapath), khối điều khiển (control unit), bộ nhớ và cơ chế vào/ra là một phương pháp tiếp cận nền tảng \cite{patterson,hennessy}. Dựa trên cơ sở lý thuyết này, đề tài đề xuất thiết kế một vi kiến trúc CPU 16-bit theo hướng tối giản. Dù được tinh gọn, thiết kế vẫn đảm bảo tính toàn vẹn trong việc mô phỏng các chu trình cốt lõi của vi kiến trúc: nạp lệnh, giải mã lệnh, thực thi ALU, truy cập bộ nhớ, ghi trả kết quả, cũng như các cơ chế xử lý xung đột (hazard) trên đường ống.
+	
+	Kiến trúc Von Neumann được áp dụng làm nền tảng phát triển dựa trên đặc trưng sử dụng chung không gian bộ nhớ cho cả lệnh (instruction) và dữ liệu (data) \cite{vonneumann,patterson}. Mô hình chương trình được lưu trữ (stored-program) này cho phép minh họa một cách trực quan mối quan hệ phụ thuộc giữa lõi CPU và hệ thống con bộ nhớ (memory subsystem). Tuy nhiên, hạn chế cố hữu của kiến trúc Von Neumann là nguy cơ phát sinh xung đột cấu trúc (\textit{structural hazard}) khi các tầng nạp lệnh (IF) và truy cập bộ nhớ (MEM) đồng thời yêu cầu tài nguyên. Để giải quyết vấn đề này, hệ thống được tích hợp thêm một bộ điều phối bộ nhớ (\texttt{memory\_arbiter}) nhằm quản lý và phân giải các yêu cầu truy xuất một cách hiệu quả.
+	
+	Nhằm tối ưu hóa thông lượng (throughput) của hệ thống, kỹ thuật đường ống (pipeline) 5 tầng bao gồm IF (Nạp lệnh) – ID (Giải mã) – EX (Thực thi) – MEM (Truy cập bộ nhớ) – WB (Ghi trả kết quả) được triển khai. Đây là mô hình kinh điển giúp quan sát và xử lý triệt để các dạng xung đột dữ liệu (data hazard), xung đột tải - sử dụng (load-use hazard) và xung đột điều khiển (control hazard) \cite{patterson,hennessy}. Hơn thế nữa, để khắc phục nút thắt cổ chai về hiệu suất giữa tốc độ xử lý của CPU và độ trễ của bộ nhớ chính, một hệ thống bộ nhớ đệm (cache) đã được thiết kế bổ sung. Cấu trúc cache ánh xạ trực tiếp (direct-mapped), tuy đơn giản, nhưng vẫn đáp ứng đầy đủ yêu cầu kiểm chứng các tham số vi kiến trúc quan trọng như thẻ (tag), chỉ số (index), bit hợp lệ (valid bit), các trạng thái trúng/trượt (hit/miss), quá trình nạp lại (refill) và chính sách ghi (write policy) \cite{hennessy,patterson}.
+	
+	Về phương pháp thực thi, ngôn ngữ mô tả phần cứng Verilog HDL (được chuẩn hóa theo tiêu chuẩn IEEE 1364 \cite{ieee1364}) được lựa chọn để hiện thực hóa thiết kế ở mức thanh ghi chuyển (RTL - Register Transfer Level). Khả năng biểu diễn linh hoạt các module, tín hiệu, mạch tổ hợp và mạch tuần tự của Verilog cho phép chuyển đổi chính xác các nền tảng lý thuyết về vi kiến trúc thành các thực thể phần cứng vật lý. Đồng thời, việc sử dụng Verilog tạo điều kiện thuận lợi cho quá trình định nghĩa giao diện (interface) tường minh và xây dựng môi trường kiểm chứng (testbench) toàn diện, đảm bảo độ tin cậy của thiết kế hệ thống.
+	
+	\subsection{Tổng quan đề tài}
+	Mục tiêu trọng tâm của nghiên cứu là thiết kế và mô phỏng một vi xử lý (CPU) 16-bit dựa trên kiến trúc Von Neumann. Hệ thống tích hợp cơ chế đường ống lệnh (pipeline) 5 tầng, kết hợp với bộ nhớ đệm ánh xạ trực tiếp thống nhất (unified direct-mapped cache) và bộ nhớ chính (main memory) có mô phỏng độ trễ truy xuất. Kiến trúc mức cao nhất (top-level) của hệ thống được tổ chức theo luồng điều khiển và dữ liệu như sau:
+	\begin{center}
+		\texttt{cpu\_core $\rightarrow$ memory\_arbiter $\rightarrow$ direct\_mapped\_cache $\rightarrow$ main\_memory}
+	\end{center}
+	Trong cấu trúc này, module \texttt{cpu\_core} đảm nhiệm vai trò thực thi tập lệnh thông qua cơ chế pipeline. Module \texttt{memory\_arbiter} có chức năng phân giải và hợp nhất các yêu cầu truy xuất từ phân đoạn Nạp lệnh (IF) và Truy xuất bộ nhớ (MEM) thành một cổng giao tiếp vật lý duy nhất nối với bộ nhớ đệm. Tiếp đó, \texttt{direct\_mapped\_cache} quản lý các trạng thái trúng/trượt (hit/miss) và thực thi chính sách ghi. Cuối cùng, \texttt{main\_memory} đóng vai trò mô phỏng bộ nhớ RAM đánh địa chỉ theo từ (word-addressed) với các thông số độ trễ được cấu hình sẵn.
+
+	{\footnotesize
+		\begin{longtable}[c]{@{} >{\RaggedRight\arraybackslash}p{4.05cm} >{\RaggedRight\arraybackslash}p{4.65cm} >{\RaggedRight\arraybackslash}p{5.0cm} @{}}
+			\caption{Tổng quan các thành phần chính của hệ thống}\\
+			\toprule
+			\textbf{Thành phần} & \textbf{Vai trò} & \textbf{Nội dung cần kiểm chứng} \\
+			\midrule
+			\endfirsthead
+			\caption[]{Tổng quan các thành phần chính của hệ thống (tiếp)}\\
+			\toprule
+			\textbf{Thành phần} & \textbf{Vai trò} & \textbf{Nội dung cần kiểm chứng} \\
+			\midrule
+			\endhead
+			\midrule
+			\multicolumn{3}{r}{\small\itshape(tiếp trang sau)} \\
+			\endfoot
+			\bottomrule
+			\endlastfoot
+			\texttt{cpu\_core} & Thực thi tập lệnh (ISA) 16-bit qua pipeline 5 tầng & Cập nhật PC, giải mã lệnh, tính toán ALU, truy cập bộ nhớ, ghi trả kết quả, và xử lý trạng thái HALT \\
+			\texttt{register\_file} & Quản lý tập 8 thanh ghi 16-bit & Tính chính xác khi đọc/ghi địa chỉ; duy trì giá trị \texttt{R0} luôn bằng 0 \\
+			\texttt{alu} & Xử lý các phép toán số học, logic, dịch bit (shift) và so sánh & Độ chính xác của kết quả 16-bit và các cờ trạng thái (\texttt{zero}, \texttt{negative}, \texttt{overflow}) \\
+			\texttt{hazard\_detection\_unit} & Phát hiện và phân giải các tình huống cần đình trệ (stall) hoặc xả (flush) pipeline & Xung đột tải-sử dụng (load-use hazard), đình trệ do trượt cache, và cơ chế chèn chu kỳ trống (bubble) \\
+			\texttt{forwarding\_unit} & Lựa chọn và chuyển tiếp (forward) dữ liệu về phân đoạn EX & Chuyển tiếp kết quả từ các chốt EX/MEM hoặc MEM/WB; ngăn chặn chuyển tiếp sai vào \texttt{R0} \\
+			\texttt{memory\_arbiter} & Điều phối các yêu cầu truy xuất từ tầng IF và MEM đến cache & Mức độ ưu tiên của MEM so với IF; kích hoạt trạng thái stall cho IF khi xảy ra tranh chấp tài nguyên \\
+			\texttt{direct\_mapped\_cache} & Bộ nhớ đệm cấp 1 (L1) dùng chung cho lệnh và dữ liệu & Các cơ chế trúng/trượt, nạp lại (refill), chính sách ghi xuyên (write-through) và không cấp phát khi ghi (no-write-allocate) \\
+			\texttt{main\_memory} & Mô phỏng bộ nhớ RAM có độ trễ truy xuất & Tín hiệu \texttt{ready} chỉ bật khi hoàn tất yêu cầu; tính toàn vẹn của dữ liệu trong quá trình đọc/ghi \\
+			\texttt{assembler.py} & Trình biên dịch mã hợp ngữ (assembly) sang tập tin \texttt{.mem} & Logic mã hóa (encoding) các tập lệnh R-type, I-type, J-type; xử lý chính xác nhãn (label) và hằng số (immediate) \\
+		\end{longtable}
+	}
+	
+	\subsection{Mục tiêu đề tài}
+	Mục tiêu tổng quát của project là xây dựng một mô hình CPU có thể mô phỏng được toàn bộ luồng thực thi instruction từ chương trình assembly đến kết quả trên register/memory. Các mục tiêu cụ thể bao gồm:
+	\begin{itemize}
+		\item Thiết kế CPU 16-bit với instruction width, data width và address width đều là 16-bit.
+		\item Xây dựng tập 8 thanh ghi tổng quát từ \texttt{R0} đến \texttt{R7}, trong đó \texttt{R0 = 0}.
+		\item Định nghĩa ISA gồm các nhóm lệnh R-type, I-type và J-type, đủ để kiểm thử arithmetic, memory, branch, jump và halt.
+		\item Triển khai pipeline 5 tầng gồm IF, ID, EX, MEM và WB.
+		\item Thiết kế control unit, pipeline registers, hazard detection, forwarding, stall và flush.
+		\item Sử dụng unified direct-mapped cache để mô phỏng hệ thống bộ nhớ chung instruction/data.
+		\item Mô phỏng main memory có delay từ 5 đến 10 chu kỳ để kiểm tra stall khi bộ nhớ chưa sẵn sàng.
+		\item Xây dựng Python assembler để dịch file \texttt{.asm} sang file \texttt{.mem} dùng cho \texttt{\$readmemh}.
+		\item Xây dựng testbench cho từng module và testbench tích hợp toàn hệ thống.
+		\item Tổng hợp kết quả kiểm thử, waveform và bảng pass/fail để đánh giá mức độ hoàn thành.
+	\end{itemize}
+	
+	\subsection{Thông tin cần kiểm chứng và nguồn trích dẫn}
+	Báo cáo phân biệt giữa hai loại thông tin: thông tin nền tảng cần trích dẫn từ tài liệu học thuật/chuẩn kỹ thuật, và thông tin implementation cần kiểm chứng bằng simulation của chính project. Cách phân biệt này giúp phần viết tránh nhầm lẫn giữa kiến thức đã được công bố và kết quả do nhóm tự triển khai.
+	
+	\begingroup
+	\centering
+	\footnotesize
+	\begin{longtblr}[
+		caption = {Các thông tin cần kiểm chứng trong báo cáo},
+		label = {tab:intro-verification-sources},
+		]{
+			colspec = {@{} >{\RaggedRight\arraybackslash}p{4cm} >{\RaggedRight\arraybackslash}p{6.7cm} >{\RaggedRight\arraybackslash}p{3.7cm} @{}},
+			rowhead = 1,
+		}
+		\toprule
+		Nhóm thông tin & Nội dung cần kiểm chứng & Nguồn/Phương pháp \\
+		\midrule
+		Nền tảng Von Neumann & Stored-program model, instruction và data dùng chung bộ nhớ & Tài liệu EDVAC và giáo trình tổ chức máy tính \cite{vonneumann,patterson} \\
+		Pipeline & Ý nghĩa pipeline, stage IF/ID/EX/MEM/WB, hazard và cơ chế stall/flush/forwarding & Giáo trình kiến trúc/tổ chức máy tính \cite{patterson,hennessy} \\
+		Cache & Locality, cache hit/miss, direct-mapped cache, write-through và memory hierarchy & Giáo trình kiến trúc máy tính \cite{hennessy,patterson} \\
+		Verilog HDL & Vai trò Verilog trong mô tả, mô phỏng và kiểm chứng phần cứng số & Chuẩn IEEE 1364 \cite{ieee1364} \\
+		ISA của nhóm & Opcode, funct, định dạng R/I/J, quy ước branch/jump/HALT & Bảng ISA trong báo cáo và test assembler \\
+		Datapath/Control & Đường đi dữ liệu, control signal, pipeline register, forwarding và hazard detection & Testbench module và waveform tích hợp \\
+		Memory subsystem & Arbiter ưu tiên MEM, cache hit/miss, RAM delay và tín hiệu \texttt{ready} & Testbench cache/RAM/arbiter \\
+		Tooling & \texttt{assembler.py} mã hóa đúng file \texttt{.asm} sang \texttt{.mem} & So sánh output hex và chạy simulation \\
+		Kết quả project & Pass/fail, register/memory cuối chương trình, waveform minh họa & Log mô phỏng, waveform và bảng kết quả \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsection{Phạm vi thực hiện}
+	Project tập trung vào mô phỏng logic CPU bằng Verilog HDL ở mức RTL, chưa đặt mục tiêu tổng hợp lên FPGA hoặc tối ưu timing vật lý. Cache sử dụng cấu trúc direct-mapped với line size 1 word. Chính sách ghi sử dụng \textit{write-through}; write miss policy là \textit{no-write-allocate}. Branch được resolve ở EX stage, vì vậy khi branch hoặc jump đổi luồng điều khiển, pipeline cần flush các instruction sai đường đi. Các kỹ thuật nâng cao như superscalar, out-of-order execution, branch prediction, cache nhiều cấp, write-back cache và non-blocking cache được xem là ngoài phạm vi của phiên bản này.
+	
+	\section{Phương pháp luận}
+	Phần này mô tả cấu trúc, chức năng chính của sản phẩm, ngôn ngữ mô tả phần cứng Verilog HDL và các công cụ được chọn để triển khai, mô phỏng, kiểm thử hệ thống CPU pipeline kết hợp unified cache.
+	\subsection{Cơ sở lý thuyết nền tảng}
+	
+	\subsubsection{Kiến trúc Von Neumann}
+	\textbf{Người viết:} Lê Hoàng Dũng.
+	
+	Kiến trúc Von Neumann là mô hình máy tính stored-program, trong đó lệnh và dữ liệu được lưu trong cùng một bộ nhớ chính và được truy cập thông qua hệ thống bus chung \cite{vonneumann,patterson}. Một hệ thống cơ bản gồm CPU, bộ nhớ chính và hệ thống vào/ra; bên trong CPU thường có ALU để thực hiện phép toán, control unit để giải mã và điều phối lệnh, cùng các thanh ghi như PC và IR để lưu trạng thái tạm thời của quá trình thực thi.
+	
+	Chu trình hoạt động điển hình là \textit{fetch--decode--execute}: CPU lấy lệnh từ địa chỉ do PC trỏ tới, giải mã lệnh trong control unit, sau đó thực thi bằng ALU, register file hoặc bộ nhớ tùy loại lệnh \cite{patterson}. Cách tổ chức này đơn giản và phù hợp cho mục tiêu mô phỏng học thuật vì toàn bộ instruction/data có thể được quan sát qua một đường bộ nhớ thống nhất.
+	
+	Hạn chế chính của mô hình này là \textit{Von Neumann bottleneck}: instruction và data chia sẻ cùng bộ nhớ/bus nên CPU có thể phải chờ khi vừa cần fetch instruction vừa cần truy cập dữ liệu \cite{hennessy}. Trong project này, đặc điểm đó được mô phỏng bằng unified cache; IF stage và MEM stage cùng gửi request tới cache, còn \texttt{memory\_arbiter} điều phối truy cập và ưu tiên MEM stage khi có tranh chấp.
+	
+	\subsubsection{CPU 16-bit}
+	\textbf{Người viết:} Nguyễn Nhật Phong và Vũ Xuân Hải.
+	
+	CPU được thiết kế với độ rộng dữ liệu, địa chỉ và instruction đều là 16-bit. Hệ thống gồm 8 thanh ghi tổng quát, trong đó thanh ghi \texttt{R0} luôn bằng 0. CPU hỗ trợ các nhóm lệnh cơ bản như sau:
+	\begin{itemize}
+		\item R-type: \texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, \texttt{SLT}.
+		\item I-type: \texttt{ADDI}, \texttt{LW}, \texttt{SW}, \texttt{BEQ}, \texttt{BNE}.
+		\item J-type: \texttt{J}, \texttt{HALT}.
+	\end{itemize}
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Cấu hình tổng quan CPU},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Thành phần & Cấu hình \\
+		\midrule
+		Data width & 16-bit \\
+		Address width & 16-bit \\
+		Instruction width & 16-bit \\
+		Register file & 8 x 16-bit \\
+		Pipeline & 5 tầng \\
+		Cache & Unified direct-mapped \\
+		Main memory & Có delay \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Pipeline 5 tầng}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	Pipeline gồm 5 stage: IF, ID, EX, MEM và WB. Cơ chế này cho phép nhiều lệnh được xử lý chồng lấn, từ đó tăng throughput của hệ thống. Tuy nhiên, việc pipeline hóa cũng làm phát sinh các loại hazard, đòi hỏi phải có cơ chế stall, forwarding và flush.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Các stage trong pipeline},
+		]{
+			colspec = {lll},
+			rowhead = 1,
+		}
+		\toprule
+		Stage & Tên & Vai trò \\
+		\midrule
+		IF & Instruction Fetch & Lấy lệnh từ bộ nhớ/cache \\
+		ID & Instruction Decode & Giải mã lệnh, đọc thanh ghi \\
+		EX & Execute & Thực hiện ALU, tính địa chỉ, xét branch \\
+		MEM & Memory Access & Load/store dữ liệu \\
+		WB & Write Back & Ghi kết quả về register file \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\begin{center}
+		\texttt{IF $\rightarrow$ ID $\rightarrow$ EX $\rightarrow$ MEM $\rightarrow$ WB}
+	\end{center}
+	
+	
+	
+	
+	\subsubsection{Instruction Set Architecture --- ISA}
+	\textbf{Người viết:} Lê Hoàng Dũng.
+	
+	ISA là bản đặc tả chính thức cho CPU 16-bit của nhóm bao gồm các quy tắc chung, sau đó là định dạng lệnh, bảng mã lệnh, chi tiết ALU, quy ước assembly.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Các quyết định chính của ISA},
+		label = {tab:isa-global-rules},
+		]{
+			colspec = {l X},
+			width = \textwidth,
+			rowhead = 1,
+		}
+		\toprule
+		Mục & Đặc tả \\
+		\midrule
+		Độ rộng lệnh & 16 bit \\
+		Độ rộng dữ liệu & 16 bit \\
+		Thanh ghi & 8 thanh ghi tổng quát: \texttt{R0} đến \texttt{R7} \\
+		Luật \texttt{R0} & Đọc luôn trả \texttt{16'h0000}; mọi lệnh ghi vào \texttt{R0} bị bỏ qua \\
+		Bộ nhớ & Word-addressed, mỗi word rộng 16 bit \\
+		PC increment & Mỗi lệnh tuần tự dùng \texttt{PC = PC + 1} \\
+		\texttt{NOP} & \texttt{16'h0000}, tương đương \texttt{ADD R0, R0, R0} \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\paragraph{Định dạng lệnh}
+	ISA dùng ba định dạng lệnh: R-type cho các phép toán thanh ghi, I-type cho immediate/load/store/branch và J-type cho jump tuyệt đối.
+	
+	\begingroup
+	\centering
+	\footnotesize
+	\begin{longtblr}[
+		caption = {Định dạng bit của các loại lệnh},
+		label = {tab:isa-format},
+		]{
+			colspec = {@{} l l >{\RaggedRight\arraybackslash}p{9cm} @{}},
+			rowhead = 1,
+		}
+		\toprule
+		Format & Trường bit & Ý nghĩa \\
+		\midrule
+		R-type & \texttt{[15:12] opcode} & Opcode, luôn là \texttt{4'h0} với nhóm R-type \\
+		R-type & \texttt{[11:9]~rs}      & Toán hạng nguồn 1 \\
+		R-type & \texttt{[8:6]~rt}       & Toán hạng nguồn 2 \\
+		R-type & \texttt{[5:3]~rd}       & Thanh ghi đích \\
+		R-type & \texttt{[2:0]~funct}    & Chọn phép tính ALU \\
+		\midrule
+		I-type & \texttt{[15:12] opcode} & Opcode của lệnh I-type \\
+		I-type & \texttt{[11:9]~rs}      & Toán hạng nguồn hoặc base register cho \texttt{LW}/\texttt{SW} \\
+		I-type & \texttt{[8:6]~rt}       & Đích với \texttt{ADDI}/\texttt{LW}, dữ liệu với \texttt{SW}, toán hạng so sánh với \texttt{BEQ}/\texttt{BNE} \\
+		I-type & \texttt{[5:0]~imm6}     & Immediate 6 bit, được sign-extend trước khi vào ALU \\
+		\midrule
+		J-type & \texttt{[15:12] opcode} & Opcode của lệnh nhảy hoặc \texttt{HALT} \\
+		J-type & \texttt{[11:0]~address}  & Địa chỉ nhảy tuyệt đối 12 bit theo word address \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\paragraph{Opcode}
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Bảng opcode},
+		label = {tab:isa-opcode},
+		]{
+			colspec = {lll},
+			rowhead = 1,
+		}
+		\toprule
+		Opcode & Mnemonic & Loại \\
+		\midrule
+		\texttt{4'h0} & R-type & R \\
+		\texttt{4'h1} & \texttt{ADDI} & I \\
+		\texttt{4'h2} & \texttt{LW} & I \\
+		\texttt{4'h3} & \texttt{SW} & I \\
+		\texttt{4'h4} & \texttt{BEQ} & I \\
+		\texttt{4'h5} & \texttt{BNE} & I \\
+		\texttt{4'h6} & \texttt{J} & J \\
+		\texttt{4'hF} & \texttt{HALT} & J-like \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\paragraph{Funct và mã ALU}
+	Với R-type, opcode luôn là \texttt{4'h0}; phép toán cụ thể được chọn bằng field \texttt{funct[2:0]}. Control unit zero-extend field này thành \texttt{alu\_op = \{1'b0, funct\}}, nên mã ALU hợp lệ nằm từ \texttt{4'b0000} đến \texttt{4'b0111}.
+	
+	\begingroup
+	\centering
+	\footnotesize
+	\begin{longtblr}[
+		caption = {Bảng funct của R-type},
+		label = {tab:isa-funct},
+		]{
+			colspec = {@{} l l l >{\RaggedRight\arraybackslash}p{8cm} @{}},
+			rowhead = 1,
+		}
+		\toprule
+		Funct & \texttt{alu\_op} & Lệnh & Mô tả ngắn \\
+		\midrule
+		\texttt{3'h0} & \texttt{4'b0000} & \texttt{ADD} & \texttt{rd = rs + rt}, có kiểm tra overflow có dấu \\
+		\texttt{3'h1} & \texttt{4'b0001} & \texttt{SUB} & \texttt{rd = rs - rt}, có kiểm tra overflow có dấu \\
+		\texttt{3'h2} & \texttt{4'b0010} & \texttt{AND} & AND từng bit, \texttt{overflow = 0} \\
+		\texttt{3'h3} & \texttt{4'b0011} & \texttt{OR}  & OR từng bit, \texttt{overflow = 0} \\
+		\texttt{3'h4} & \texttt{4'b0100} & \texttt{XOR} & XOR từng bit, \texttt{overflow = 0} \\
+		\texttt{3'h5} & \texttt{4'b0101} & \texttt{SLT} & So sánh có dấu: \texttt{rd = (rs < rt) ? 1 : 0} \\
+		\texttt{3'h6} & \texttt{4'b0110} & \texttt{SLL} & Dịch trái logic: \texttt{rd = rs << rt[3:0]} \\
+		\texttt{3'h7} & \texttt{4'b0111} & \texttt{SRL} & Dịch phải logic: \texttt{rd = rs >> rt[3:0]} \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\paragraph{Chi tiết hoạt động ALU}
+	\begingroup
+	\centering
+	\footnotesize
+	\begin{longtblr}[
+		caption = {Chi tiết kết quả và cờ trạng thái của ALU},
+		label = {tab:isa-alu-detail},
+		]{
+			colspec = {@{} l >{\RaggedRight\arraybackslash}p{5.5cm} >{\RaggedRight\arraybackslash}p{7cm} @{}},
+			rowhead = 1,
+		}
+		\toprule
+		Lệnh & Kết quả & Cờ trạng thái \\
+		\midrule
+		\texttt{ADD} & \texttt{result = rs + rt}, kết quả wrap 16 bit & \texttt{overflow = 1} khi cộng hai số cùng dấu nhưng kết quả khác dấu; \texttt{zero=(result==0)}; \texttt{negative=result[15]} \\
+		\texttt{SUB} & \texttt{result = rs - rt}, kết quả wrap 16 bit & \texttt{overflow = 1} khi trừ hai số khác dấu và kết quả sai dấu; \texttt{zero=(result==0)}; \texttt{negative=result[15]} \\
+		\texttt{AND} & \texttt{result = rs \& rt} & \texttt{overflow = 0}; cập nhật \texttt{zero}, \texttt{negative} theo kết quả \\
+		\texttt{OR}  & \texttt{result = rs | rt}  & \texttt{overflow = 0}; cập nhật \texttt{zero}, \texttt{negative} theo kết quả \\
+		\texttt{XOR} & \texttt{result = rs \string^ rt} & \texttt{overflow = 0}; cập nhật \texttt{zero}, \texttt{negative} theo kết quả \\
+		\texttt{SLT} & \texttt{(\$signed(rs) < \$signed(rt)) ? 0001 : 0000} & So sánh có dấu; \texttt{overflow=0}; \texttt{negative=0}; \texttt{zero=1} khi \texttt{rs>=rt} \\
+		\texttt{SLL} & \texttt{result = rs << rt[3:0]} & Dùng 4 bit thấp của \texttt{rt} làm shift amount (0--15); \texttt{overflow=0} \\
+		\texttt{SRL} & \texttt{result = rs >> rt[3:0]} & Dịch phải logic, chèn 0 bên trái, không giữ bit dấu; \texttt{overflow=0} \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	Ví dụ: nếu \texttt{rs = 0x0001} và \texttt{rt = 0x0003}, lệnh \texttt{SLL rd, rs, rt} cho \texttt{result = 0x0008}. Nếu \texttt{rs = 0x8000} và \texttt{rt = 0x0001}, lệnh \texttt{SRL rd, rs, rt} cho \texttt{result = 0x4000}. Với \texttt{SLT}, nếu \texttt{R3 = 0xFFFF (-1)} và \texttt{R2 = 0x0001 (+1)} thì \texttt{SLT R1, R3, R2} cho \texttt{R1 = 1}.
+	
+	\paragraph{Quy ước assembly}
+	\begingroup
+	\centering
+	\footnotesize
+	\begin{longtblr}[
+		caption = {Cú pháp assembly khuyến nghị},
+		label = {tab:isa-asm-syntax},
+		]{
+			colspec = {@{} >{\RaggedRight\arraybackslash}p{5cm} >{\RaggedRight\arraybackslash}p{9.5cm} @{}},
+			rowhead = 1,
+		}
+		\toprule
+		Cú pháp & Ý nghĩa \\
+		\midrule
+		\texttt{ADD rd, rs, rt}        & \texttt{rd = rs + rt} \\
+		\texttt{SUB rd, rs, rt}        & \texttt{rd = rs - rt} \\
+		\texttt{AND/OR/XOR rd, rs, rt} & Phép logic tương ứng giữa \texttt{rs} và \texttt{rt} \\
+		\texttt{SLT rd, rs, rt}        & So sánh có dấu, ghi 1 nếu \texttt{rs < rt}, ngược lại ghi 0 \\
+		\texttt{SLL rd, rs, rt}        & \texttt{rd = rs << rt[3:0]} \\
+		\texttt{SRL rd, rs, rt}        & \texttt{rd = rs >> rt[3:0]} \\
+		\texttt{ADDI rt, rs, imm6}     & \texttt{rt = rs + sign\_extend(imm6)} \\
+		\texttt{LW rt, imm6(rs)}       & \texttt{rt = MEM[rs + sign\_extend(imm6)]} \\
+		\texttt{SW rt, imm6(rs)}       & \texttt{MEM[rs + sign\_extend(imm6)] = rt} \\
+		\texttt{BEQ rs, rt, label}     & Nếu \texttt{rs == rt}, PC nhận địa chỉ nhánh \\
+		\texttt{BNE rs, rt, label}     & Nếu \texttt{rs != rt}, PC nhận địa chỉ nhánh \\
+		\texttt{J label}               & PC nhận địa chỉ tuyệt đối 12 bit \\
+		\texttt{HALT}                  & Dừng pipeline, bật \texttt{halt = 1} \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\paragraph{Branch, jump và halt}
+	Branch được resolve ở EX stage. Địa chỉ đích branch được tính bằng:
+	\begin{verbatim}
+		branch_target = PC_plus_1 + sign_extend(imm6)
+		imm6 = label_address - (branch_pc + 1)
+	\end{verbatim}
+	Hai lệnh \texttt{BEQ} và \texttt{BNE} dùng phép trừ trong ALU để kiểm tra điều kiện; nếu \texttt{zero = 1}, hai thanh ghi bằng nhau.
+	
+	Jump dùng địa chỉ tuyệt đối 12 bit theo word address:
+	\begin{verbatim}
+		jump_target = zero_extend(address[11:0])
+		range       = 0x000 .. 0xFFF
+	\end{verbatim}
+	
+	Khi \texttt{opcode = 4'hF}, lệnh \texttt{HALT} bật \texttt{halt = 1}, pipeline không fetch lệnh mới và PC giữ nguyên. Trong thiết kế hiện tại, \texttt{HALT} được implement ở tầng ID và tín hiệu \texttt{halt} được truyền qua pipeline register.
+	
+	\paragraph{Cờ trạng thái ALU}
+	\begingroup
+	\centering
+	\footnotesize
+	\begin{longtblr}[
+		caption = {Cờ trạng thái ALU},
+		label = {tab:alu-flags},
+		]{
+			colspec = {@{} l l >{\RaggedRight\arraybackslash}p{9cm} @{}},
+			rowhead = 1,
+		}
+		\toprule
+		Cờ & Kiểu/bit & Mô tả \\
+		\midrule
+		\texttt{zero}     & \texttt{wire}       & Bằng 1 khi \texttt{result == 16'h0000}; dùng cho \texttt{BEQ}/\texttt{BNE} \\
+		\texttt{negative} & \texttt{result[15]}  & Bằng 1 khi kết quả là số âm theo two's complement \\
+		\texttt{overflow} & \texttt{reg}        & Bằng 1 khi \texttt{ADD}/\texttt{SUB} tràn số có dấu; bằng 0 với logic/shift \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	Trong implementation, \texttt{zero} là tín hiệu \texttt{assign} dạng combinational, còn \texttt{negative} và \texttt{overflow} là kiểu \texttt{reg} được cập nhật trong khối \texttt{always @(*)}.
+	
+	
+	\subsubsection{Cấu trúc Tổng thể Đường ống Dữ liệu (Datapath)}
+	\textbf{Thực hiện:} Vũ Xuân Hải
+	
+	Đường ống dữ liệu (Datapath) là hệ thống mạch kết nối lõi, chịu trách nhiệm định tuyến, lưu trữ và biến đổi dữ liệu xuyên suốt quá trình thực thi lệnh của vi xử lý. Trong kiến trúc 5 tầng (5-Stage Pipeline) kết hợp với nền tảng bộ nhớ Von Neumann, Datapath được cấu thành từ các module tổ hợp lõi (Register File, ALU, Immediate Generator, Multiplexers) và được phân tách đồng bộ bởi hệ thống thanh ghi đường ống (Pipeline Registers).
+	
+	Luồng dữ liệu tổng quát vận hành qua 5 chu kỳ khép kín, định hình chuỗi hành vi của phần cứng đối với một mã lệnh 16-bit:
+	\begin{itemize}
+		\item \textbf{Tầng Lấy lệnh (Instruction Fetch - IF):} Con trỏ lệnh (Program Counter) cấp địa chỉ để truy xuất mã lệnh từ bộ nhớ. Mã lệnh thô sau đó được chốt vào thanh ghi cách ly IF/ID để chuyển sang chu kỳ tiếp theo.
+		\item \textbf{Tầng Giải mã (Instruction Decode - ID):} Tập thanh ghi (Register File) thực hiện trích xuất dữ liệu của toán hạng \texttt{rs} và \texttt{rt}. Song song đó, khối Immediate Generator tiến hành nội suy và mở rộng hằng số có trong mã lệnh đạt chuẩn 16-bit. Toàn bộ dữ liệu này được đẩy vào chốt ID/EX.
+		\item \textbf{Tầng Thực thi (Execute - EX):} Mạng lưới bộ định tuyến (MUX) tiến hành bẻ ghi nguồn dữ liệu đầu vào. Khối tính toán trung tâm (ALU) tiếp nhận toán hạng để thực thi các phép toán số học/logic, đồng thời sinh ra các cờ trạng thái (\texttt{zero}, \texttt{negative}, \texttt{overflow}). Kết quả thực thi được chốt vào ranh giới EX/MEM.
+		\item \textbf{Tầng Truy xuất Bộ nhớ (Memory - MEM):} Tại pha này, hệ thống tương tác với bộ nhớ chính. Đối với các lệnh \texttt{LOAD}/\texttt{STORE}, tín hiệu đọc/ghi RAM được kích hoạt. Đối với các lệnh tính toán thuần túy, kết quả từ ALU sẽ chảy xuyên qua pha này và được bảo toàn vào chốt MEM/WB.
+		\item \textbf{Tầng Ghi trả (Write-Back - WB):} Khối MUX cuối cùng quyết định luồng dữ liệu hợp lệ (từ ALU hoặc từ bộ nhớ) để dội ngược về Tập thanh ghi. Thao tác cập nhật dữ liệu vào thanh ghi đích \texttt{rd} được đồng bộ hóa theo sườn lên của xung nhịp, chính thức khép lại vòng đời thực thi của lệnh.
+	\end{itemize}
+	
+	
+	
+	\textit{(Ghi chú bổ sung: Sơ đồ khối trực quan mô tả mạng lưới định tuyến vật lý và các cổng giao tiếp bên trong Datapath sẽ được cập nhật trong phiên bản báo cáo tổng hợp cuối cùng nhằm đối chiếu với các đặc tả kỹ thuật nêu trên.)}
+	
+	\textbf{Thực hiện:} Vũ Xuân Hải
+	
+	\subsubsection{Khối Tính toán Trung tâm (ALU)}
+	Khối ALU (Arithmetic Logic Unit) được thiết kế để thực hiện các phép toán số học và logic cơ bản cho luồng dữ liệu 16-bit. Khối hoạt động dựa trên mạch tổ hợp (combinational logic) và nhận mã lệnh điều khiển từ Control Unit để quyết định phép toán cần thực thi.
+	
+	ALU hỗ trợ tổng cộng 8 phép toán bao gồm:
+	\begin{itemize}
+		\item \textbf{Số học:} \texttt{ADD} (cộng), \texttt{SUB} (trừ).
+		\item \textbf{Logic:} \texttt{AND}, \texttt{OR}, \texttt{XOR}.
+		\item \textbf{Dịch bit:} \texttt{SLL} (dịch trái logic), \texttt{SRL} (dịch phải logic).
+		\item \textbf{So sánh:} \texttt{SLT} (Set on Less Than - so sánh nhỏ hơn có dấu).
+	\end{itemize}
+	
+	Để hỗ trợ quá trình kiểm tra điều kiện và rẽ nhánh của CPU, ALU xuất ra 3 cờ trạng thái (status flags) sau mỗi phép tính:
+	\begin{itemize}
+		\item \textbf{Cờ \texttt{zero}:} Đạt mức logic 1 khi kết quả tính toán bằng \texttt{16'h0000}.
+		\item \textbf{Cờ \texttt{negative}:} Đạt mức logic 1 khi kết quả mang giá trị âm (bit dấu MSB bằng 1).
+		\item \textbf{Cờ \texttt{overflow}:} Đạt mức logic 1 khi xảy ra hiện tượng tràn số trong các phép toán cộng hoặc trừ có dấu.
+	\end{itemize}
+	
+	\subsubsection{Tập thanh ghi (Register File)}
+	Tập thanh ghi nội bộ (Register File) cung cấp không gian lưu trữ tạm thời với tốc độ truy xuất cao, đóng vai trò cung cấp toán hạng đầu vào cho ALU và lưu trữ kết quả trả về.
+	
+	Đặc tả kỹ thuật của tập thanh ghi bao gồm:
+	\begin{itemize}
+		\item \textbf{Cấu trúc không gian:} Hệ thống gồm 8 thanh ghi, mỗi thanh ghi có độ rộng 16-bit.
+		\item \textbf{Cổng giao tiếp (Ports):} Hỗ trợ đọc xuất cùng lúc 2 toán hạng thông qua 2 cổng đọc độc lập (\texttt{rs}, \texttt{rt}) và lưu dữ liệu thông qua 1 cổng ghi (\texttt{rd}).
+		\item \textbf{Cơ chế đồng bộ:} Quá trình đọc diễn ra bất đồng bộ (asynchronous read) để đảm bảo tính liên tục của luồng dữ liệu. Quá trình ghi được đồng bộ theo sườn lên của xung nhịp hệ thống (positive edge-triggered) khi tín hiệu cho phép ghi được kích hoạt.
+		\item \textbf{Đặc tả thanh ghi R0:} Thanh ghi \texttt{R0} (tại địa chỉ \texttt{3'b000}) được gắn cứng (hardwired) với giá trị \texttt{16'h0000}. Thiết kế phần cứng mặc định không cho phép ghi đè lên thanh ghi này nhằm phục vụ các phép tính cần hằng số 0.
+	\end{itemize}
+	
+	
+	
+	
+	
+	\subsubsection{Control Unit}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	Control unit sinh các tín hiệu điều khiển dựa trên \texttt{opcode} và \texttt{funct}. Các tín hiệu chính gồm \texttt{reg\_dst}, \texttt{alu\_src}, \texttt{mem\_to\_reg}, \texttt{reg\_write}, \texttt{mem\_read}, \texttt{mem\_write}, \texttt{branch}, \texttt{branch\_ne}, \texttt{jump}, \texttt{alu\_op} và \texttt{halt}.
+	
+	\begingroup
+	\centering
+	\footnotesize
+	\begin{longtblr}[
+		caption = {Bảng tín hiệu điều khiển theo lệnh},
+		]{
+			colspec = {@{} l c c c c c c c @{}},
+			rowhead = 1,
+		}
+		\toprule
+		Lệnh & reg\_write & mem\_read & mem\_write & alu\_src & mem\_to\_reg & branch & jump \\
+		\midrule
+		ADD/SUB/\ldots/SLT & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		ADDI    & 1 & 0 & 0 & 1 & 0 & 0 & 0 \\
+		LW      & 1 & 1 & 0 & 1 & 1 & 0 & 0 \\
+		SW      & 0 & 0 & 1 & 1 & 0 & 0 & 0 \\
+		BEQ/BNE & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+		J       & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+		HALT    & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Cache Memory}
+	\textbf{Người viết:} Nguyễn Vũ Hoàng.
+	
+	Cache có vai trò giảm thời gian truy cập bộ nhớ chính. Project sử dụng unified direct-mapped cache, nghĩa là instruction và data dùng chung một cache. Với cấu hình 16 lines, line size 1 word, ta có:
+	\begin{itemize}
+		\item Tag = \texttt{address[15:4]}
+		\item Index = \texttt{address[3:0]}
+	\end{itemize}
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Chính sách cache},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Chính sách & Ý nghĩa \\
+		\midrule
+		Write-through & Ghi cache đồng thời ghi xuống RAM \\
+		No-write-allocate & Write miss ghi thẳng xuống RAM, không nạp vào cache \\
+		Read miss refill & Read miss đọc RAM rồi refill cache \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	FSM cache nên được mô tả theo các trạng thái: \texttt{IDLE}, \texttt{LOOKUP}, \texttt{HIT\_READ}, \texttt{HIT\_WRITE}, \texttt{MISS\_READ\_REQ}, \texttt{MISS\_READ\_WAIT}, \texttt{REFILL}, \texttt{MISS\_WRITE\_REQ}, \texttt{MISS\_WRITE\_WAIT} và \texttt{DONE}.
+	
+	\subsubsection{Main Memory có Delay}
+	\textbf{Người viết:} Nguyễn Vũ Hoàng.
+	
+	Main memory được mô phỏng như một RAM có độ trễ 5--10 chu kỳ. Tín hiệu \texttt{mem\_ready} chỉ được kích hoạt khi dữ liệu thực sự sẵn sàng. Mục tiêu là mô phỏng gần hơn với thực tế của bộ nhớ ngoài, từ đó buộc CPU và cache phải stall đúng cách khi RAM chưa phản hồi.
+	
+	\subsubsection{Hazard trong Pipeline}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	\paragraph{Structural Hazard}
+	Structural hazard xuất hiện khi IF và MEM cùng cần truy cập unified cache. Cách xử lý là dùng \texttt{memory\_arbiter}, ưu tiên MEM stage, còn IF stage sẽ bị stall nếu MEM đang dùng cache.
+	
+	\paragraph{Data Hazard}
+	Ví dụ:
+	\begin{verbatim}
+		ADD R1, R2, R3
+		ADD R4, R1, R5
+	\end{verbatim}
+	Cách xử lý là forwarding từ EX/MEM về EX và từ MEM/WB về EX, đồng thời không forward nếu thanh ghi đích là \texttt{R0}.
+	
+	\paragraph{Load-use Hazard}
+	Ví dụ:
+	\begin{verbatim}
+		LW  R1, 0(R0)
+		ADD R2, R1, R1
+	\end{verbatim}
+	Cách xử lý là stall \texttt{PC} và \texttt{IF/ID}, đồng thời flush \texttt{ID/EX} để chèn bubble.
+	
+	\paragraph{Control Hazard}
+	Control hazard xuất hiện với branch và jump. Cách xử lý là resolve branch tại EX stage; nếu branch taken hoặc jump thì flush các instruction sai đường đi.
+	
+	\subsection{Phân tích yêu cầu hệ thống}
+	\textbf{Người viết chính:} Nguyễn Nhật Phong, bổ sung bởi cả nhóm.
+	
+	\subsubsection{Yêu cầu chức năng}
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Yêu cầu chức năng của hệ thống},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Nhóm chức năng & Yêu cầu \\
+		\midrule
+		CPU Core & Thực hiện pipeline 5 tầng \\
+		ISA & Hỗ trợ R-type, I-type, J-type \\
+		Register File & 8 thanh ghi, R0 = 0 \\
+		ALU & ADD, SUB, AND, OR, SLT... \\
+		Memory & Load/store qua cache \\
+		Cache & Hit/miss, refill, write-through \\
+		Hazard & Stall, forwarding, flush \\
+		Tooling & Assembler \texttt{.asm} sang \texttt{.mem} \\
+		Verification & Testbench module và tích hợp \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Yêu cầu phi chức năng}
+	Các yêu cầu phi chức năng bao gồm: code Verilog rõ ràng và chia module hợp lý; interface giữa các module thống nhất; có testbench kiểm chứng từng phần; có waveform minh họa hoạt động; có tài liệu ISA, module interface, cache FSM; và có bảng kết quả pass/fail cho từng nhóm kiểm thử.
+	
+	\subsection{Thiết kế hệ thống}
+	\textbf{Người viết chính:} Lê Hoàng Dũng
+	
+	\subsubsection{Tổng quan kiến trúc hệ thống}
+	\textbf{Người viết:} Lê Hoàng Dũng.
+	
+	Hệ thống được tổ chức theo top-level đã khóa gồm bốn khối chính nối tiếp nhau: \texttt{cpu\_core}, \texttt{memory\_arbiter}, \texttt{direct\_mapped\_cache} và \texttt{main\_memory}. Cấu trúc này phản ánh kiến trúc Von Neumann với một đường bộ nhớ thống nhất, trong đó CPU có hai cổng logic riêng cho nạp lệnh và truy cập dữ liệu, còn arbiter hợp nhất hai luồng này xuống một cổng cache vật lý.
+	
+	\begin{center}
+		\texttt{cpu\_core $\rightarrow$ memory\_arbiter $\rightarrow$ direct\_mapped\_cache $\rightarrow$ main\_memory}
+	\end{center}
+	
+	Về trạng thái hiện tại, dự án đã hoàn thiện pipeline 5 tầng gồm IF, ID, EX, MEM và WB. Các module hỗ trợ như \texttt{pipeline\_regs}, \texttt{forwarding\_unit} và \texttt{hazard\_detection\_unit} được tích hợp để xử lý data hazard, load-use hazard và control hazard. Khối \texttt{direct\_mapped\_cache} đã hoàn thiện FSM xử lý cache hit/miss, refill, write-through và phối hợp với RAM có delay thông qua \texttt{memory\_arbiter}.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Tổng quan các khối top-level},
+		]{
+			colspec = {l X},
+			width = \textwidth,
+			rowhead = 1,
+		}
+		\toprule
+		Khối & Vai trò chính \\
+		\midrule
+		\texttt{cpu\_core} & Thực thi pipeline 5 tầng, phát yêu cầu IF/MEM và nhận dữ liệu trả về từ hệ thống bộ nhớ \\
+		\texttt{memory\_arbiter} & Điều phối hai cổng logic IF và MEM thành một cổng cache thống nhất, ưu tiên MEM khi tranh chấp \\
+		\texttt{direct\_mapped\_cache} & Cache trực tiếp ánh xạ, 16 lines x 1 word, hỗ trợ hit/miss, refill, write-through và no-write-allocate \\
+		\texttt{main\_memory} & Bộ nhớ chính word-addressed, mô phỏng độ trễ và chỉ xử lý tối đa một request outstanding \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Luồng pipeline và xử lý xung đột}
+	\textbf{Người viết:} Lê Hoàng Dũng.
+	
+	Pipeline được chia thành năm tầng. IF giữ PC và gửi yêu cầu đọc instruction; ID giải mã lệnh, đọc register file và tạo immediate; EX thực thi ALU, tính địa chỉ và quyết định branch; MEM phát yêu cầu load/store; WB ghi kết quả về register file. Các pipeline register \texttt{IF/ID}, \texttt{ID/EX}, \texttt{EX/MEM} và \texttt{MEM/WB} cần hỗ trợ ba cơ chế điều khiển quan trọng: \texttt{stall}, \texttt{flush} và \texttt{valid}.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Quy tắc điều khiển pipeline và bộ nhớ},
+		]{
+			colspec = {l X},
+			width = \textwidth,
+			rowhead = 1,
+		}
+		\toprule
+		Điều kiện & Hành động \\
+		\midrule
+		Cache miss & Stall toàn cục cho đến khi cache bật \texttt{ready} \\
+		Load-use hazard & Giữ PC và IF/ID, flush ID/EX để chèn bubble \\
+		Branch/jump taken & Flush IF/ID và ID/EX, đồng thời cập nhật PC tới target \\
+		IF và MEM cùng truy cập cache & \texttt{memory\_arbiter} ưu tiên MEM, IF bị stall trong chu kỳ tranh chấp \\
+		Ghi vào \texttt{R0} & Bỏ qua thao tác ghi, bảo toàn \texttt{R0 = 0} \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Tổng quan giao diện module}
+	\textbf{Người viết:} Lê Hoàng Dũng.
+	
+	Các module dùng quy ước đặt tên tín hiệu thống nhất gồm \texttt{clk}, \texttt{rst}, \texttt{req}, \texttt{we}, \texttt{addr}, \texttt{wdata}, \texttt{rdata}, \texttt{ready}, \texttt{stall}, \texttt{flush}, \texttt{valid}, \texttt{hit} và \texttt{miss}. Ở top-level, \texttt{cpu\_cache\_top} nhận \texttt{clk}, \texttt{rst} và xuất các tín hiệu quan sát như \texttt{halted}, \texttt{debug\_pc}. Bên trong, \texttt{cpu\_core} tách hai cổng logic IF/MEM để mô tả đúng nhu cầu pipeline, còn \texttt{memory\_arbiter} chuyển chúng thành request cache thống nhất.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Các nhóm giao diện chính của hệ thống},
+		]{
+			colspec = {l l X},
+			width = \textwidth,
+			rowhead = 1,
+		}
+		\toprule
+		Module & Nhóm cổng & Mô tả \\
+		\midrule
+		\texttt{cpu\_core} & IF logical port & \texttt{if\_req}, \texttt{if\_addr}, \texttt{if\_rdata}, \texttt{if\_ready} dùng để nạp instruction \\
+		\texttt{cpu\_core} & MEM logical port & \texttt{mem\_req}, \texttt{mem\_we}, \texttt{mem\_addr}, \texttt{mem\_wdata}, \texttt{mem\_rdata}, \texttt{mem\_ready} dùng cho load/store \\
+		\texttt{memory\_arbiter} & Cache port & \texttt{cache\_req}, \texttt{cache\_we}, \texttt{cache\_addr}, \texttt{cache\_wdata}, \texttt{cache\_rdata}, \texttt{cache\_ready} \\
+		\texttt{direct\_mapped\_cache} & CPU/arbiter side & \texttt{req}, \texttt{we}, \texttt{addr}, \texttt{wdata}, \texttt{rdata}, \texttt{ready}, \texttt{hit}, \texttt{miss} \\
+		\texttt{direct\_mapped\_cache} & RAM side & \texttt{mem\_req}, \texttt{mem\_we}, \texttt{mem\_addr}, \texttt{mem\_wdata}, \texttt{mem\_rdata}, \texttt{mem\_ready} \\
+		\texttt{main\_memory} & Memory port & \texttt{req}, \texttt{we}, \texttt{addr}, \texttt{wdata}, \texttt{rdata}, \texttt{ready} với mô hình một request outstanding \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Ghi chú phạm vi thiết kế}
+	\textbf{Người viết:} Lê Hoàng Dũng.
+	
+	Phiên bản kiến trúc hiện tại tập trung vào CPU pipeline 5 tầng đơn giản, cache blocking và hệ thống bộ nhớ một cấp. Các kỹ thuật nâng cao như superscalar, out-of-order execution, branch prediction, multi-level cache, write-back cache, non-blocking cache và nhiều request bộ nhớ outstanding được xem là ngoài phạm vi để giữ thiết kế phù hợp với mục tiêu mô phỏng học thuật.
+	
+	\subsubsection{Kiến trúc tổng thể}
+	Sơ đồ tổng thể của hệ thống có thể mô tả theo cấu trúc sau:
+	\begin{verbatim}
+		CPU Core 5-stage pipeline
+		IF -> ID -> EX -> MEM -> WB
+		|
+		| IF request + MEM request
+		v
+		Memory Arbiter
+		|
+		v
+		Unified Direct-Mapped Cache
+		|
+		v
+		Main Memory co delay
+	\end{verbatim}
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Vai trò các khối chính},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Khối & Vai trò \\
+		\midrule
+		\texttt{cpu\_core} & Thực hiện pipeline CPU \\
+		\texttt{memory\_arbiter} & Điều phối IF/MEM request \\
+		\texttt{direct\_mapped\_cache} & Cache dùng chung instruction/data \\
+		\texttt{main\_memory} & RAM có delay \\
+		\texttt{cpu\_cache\_top} & Kết nối toàn bộ hệ thống \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Thiết kế module CPU Core}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	Các module cần mô tả gồm: \texttt{pc\_unit}, \texttt{instruction\_decoder}, \texttt{control\_unit}, \texttt{register\_file}, \texttt{immediate\_generator}, \texttt{alu}, \texttt{forwarding\_unit}, \texttt{hazard\_detection\_unit}, cùng các pipeline register: \texttt{pipeline\_reg\_if\_id}, \texttt{pipeline\_reg\_id\_ex}, \texttt{pipeline\_reg\_ex\_mem}, \texttt{pipeline\_reg\_mem\_wb}. Mỗi module cần được trình bày rõ input/output và vai trò trong luồng xử lý.
+	
+	\subsubsection{Thiết kế Datapath \& ALU}
+	\textbf{Người viết:} Vũ Xuân Hải.
+	
+	Phần này cần trình bày sơ đồ datapath, vai trò của ALU, register file, immediate generator và các khối MUX. Ngoài ra, nên phân tích luồng dữ liệu cho từng loại lệnh: R-type, \texttt{ADDI}, \texttt{LW}, \texttt{SW}, \texttt{BEQ/BNE} và \texttt{J}.
+	
+	\subsubsection{Thiết kế Control Unit}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	Nội dung cần làm rõ cách giải mã \texttt{opcode}/\texttt{funct}, cách sinh control signal cho từng lệnh, cách xử lý \texttt{HALT}, và cơ chế xử lý branch/jump trong pipeline.
+	
+	\subsubsection{Thiết kế Pipeline Registers}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	Pipeline register có nhiệm vụ giữ dữ liệu trung gian giữa các stage. Cần mô tả dữ liệu lưu trong từng khối, cách reset về NOP, cũng như cách stall và flush khi gặp hazard.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Thông tin lưu trong các pipeline register},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Pipeline Register & Dữ liệu lưu \\
+		\midrule
+		IF/ID & PC, instruction \\
+		ID/EX & PC, register data, immediate, control signals \\
+		EX/MEM & ALU result, write data, branch target, control signals \\
+		MEM/WB & Memory data, ALU result, write register, control signals \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Thiết kế Hazard Detection \& Forwarding}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	Công thức phát hiện load-use hazard:
+	\begin{verbatim}
+		ex_mem_read && ((ex_rt == id_rs) || (ex_rt == id_rt))
+	\end{verbatim}
+	
+	Cơ chế stall sử dụng các tín hiệu \texttt{pc\_stall}, \texttt{if\_id\_stall} và \texttt{id\_ex\_flush}. Cơ chế forwarding hỗ trợ hai hướng chính: EX/MEM $\rightarrow$ EX và MEM/WB $\rightarrow$ EX.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Mã forwarding},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Giá trị & Ý nghĩa \\
+		\midrule
+		\texttt{2'b00} & Dữ liệu gốc từ ID/EX \\
+		\texttt{2'b01} & Forward từ MEM/WB \\
+		\texttt{2'b10} & Forward từ EX/MEM \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Thiết kế Memory Arbiter}
+	\textbf{Người viết:} Nguyễn Vũ Hoàng.
+	
+	Arbiter là khối điều phối truy cập cache giữa IF stage và MEM stage. Quy tắc ưu tiên là: nếu \texttt{mem\_req = 1} thì phục vụ MEM stage; nếu không, nếu \texttt{if\_req = 1} thì phục vụ IF stage. Khi MEM chiếm cache, IF phải stall.
+	
+	\begin{verbatim}
+		IF request  ----\
+		> Memory Arbiter -> Cache
+		MEM request ----/
+	\end{verbatim}
+	
+	\subsubsection{Thiết kế Direct-Mapped Cache}
+	\textbf{Người viết:} Nguyễn Vũ Hoàng.
+	
+	Phần này cần trình bày cấu trúc cache gồm \texttt{valid array}, \texttt{tag array}, \texttt{data array}, cùng cách xác định hit/miss và cơ chế xử lý với read hit, read miss, write hit, write miss.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Các tình huống xử lý trong cache},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Trường hợp & Hành động \\
+		\midrule
+		Read hit & Trả dữ liệu từ cache \\
+		Read miss & Đọc RAM, refill cache \\
+		Write hit & Cập nhật cache và RAM \\
+		Write miss & Ghi thẳng RAM, không allocate \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Thiết kế Main Memory}
+	\textbf{Người viết:} Nguyễn Vũ Hoàng.
+	
+	Main memory cần hỗ trợ kích thước mô phỏng phù hợp, cho phép nạp nội dung bằng \texttt{\$readmemh}, cấu hình \texttt{MEM\_DELAY}, và chỉ bật \texttt{mem\_ready} khi hoàn thành một request.
+	
+	\subsubsection{Thiết kế Python Assembler}
+	\textbf{Người viết:} Lê Hoàng Dũng.
+	
+	Assembler Python là công cụ chuyển chương trình assembly của CPU 16-bit sang machine code dạng hexadecimal để nạp vào bộ nhớ mô phỏng bằng file \texttt{.mem}. Công cụ này đóng vai trò cầu nối giữa đặc tả ISA và quá trình verification: thay vì viết trực tiếp từng word mã máy, nhóm có thể viết chương trình thử nghiệm bằng mnemonic dễ đọc, sau đó assembler tự động mã hóa đúng định dạng R-type, I-type và J-type.
+	
+	Luồng xử lý của assembler gồm hai pha chính. Pha thứ nhất đọc file \texttt{.asm}, loại bỏ dòng trống/comment, nhận diện label và xây dựng bảng địa chỉ label theo word address. Pha thứ hai duyệt lại từng instruction, phân tích mnemonic/toán hạng, kiểm tra register/immediate/address, mã hóa thành instruction 16-bit và ghi từng word hex 4 ký tự vào file \texttt{.mem}.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Chức năng chính của Python assembler},
+		]{
+			colspec = {l X},
+			width = \textwidth,
+			rowhead = 1,
+		}
+		\toprule
+		Chức năng & Mô tả \\
+		\midrule
+		Tiền xử lý input & Đọc file \texttt{.asm}, bỏ comment, chuẩn hóa khoảng trắng và tách label khỏi instruction \\
+		Quản lý label & Lưu tên label và địa chỉ word tương ứng để phục vụ branch/jump \\
+		Parse register & Nhận dạng \texttt{R0}--\texttt{R7}, kiểm tra register nằm trong 3 bit hợp lệ \\
+		Parse immediate & Hỗ trợ immediate 6 bit có dấu cho I-type và kiểm tra vượt phạm vi \\
+		Mã hóa R-type & Sinh \texttt{opcode}, \texttt{rs}, \texttt{rt}, \texttt{rd}, \texttt{funct} cho các lệnh ALU \\
+		Mã hóa I-type & Sinh \texttt{opcode}, \texttt{rs}, \texttt{rt}, \texttt{imm6} cho \texttt{ADDI}, \texttt{LW}, \texttt{SW}, \texttt{BEQ}, \texttt{BNE} \\
+		Mã hóa J-type & Sinh \texttt{opcode} và địa chỉ 12 bit cho \texttt{J}; sinh \texttt{F000} cho \texttt{HALT} \\
+		Xuất file \texttt{.mem} & Ghi mỗi instruction thành một dòng hex 16-bit để dùng với \texttt{\$readmemh} \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	Assembler bám sát quy ước ISA đã chốt. Với R-type, opcode bằng \texttt{4'h0} và phép toán được xác định bằng trường \texttt{funct}. Với I-type, immediate được sign-extend khi thực thi trong CPU, nên assembler cần kiểm tra giá trị nằm trong miền biểu diễn của \texttt{imm6}. Với branch, offset được tính tương đối so với lệnh kế tiếp theo công thức \texttt{label\_address - (branch\_pc + 1)}. Với jump, địa chỉ label được mã hóa trực tiếp vào trường 12 bit.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Các nhóm lệnh assembler hỗ trợ},
+		]{
+			colspec = {l l X},
+			width = \textwidth,
+			rowhead = 1,
+		}
+		\toprule
+		Nhóm & Lệnh & Dạng assembly \\
+		\midrule
+		R-type & \texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, \texttt{XOR}, \texttt{SLT}, \texttt{SLL}, \texttt{SRL} & \texttt{OP rd, rs, rt} \\
+		I-type arithmetic & \texttt{ADDI} & \texttt{ADDI rt, rs, imm6} \\
+		I-type memory & \texttt{LW}, \texttt{SW} & \texttt{LW/SW rt, imm6(rs)} \\
+		I-type branch & \texttt{BEQ}, \texttt{BNE} & \texttt{BEQ/BNE rs, rt, label} \\
+		J-type & \texttt{J} & \texttt{J label} \\
+		System & \texttt{HALT} & \texttt{HALT} \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	Ví dụ chuyển đổi chương trình arithmetic cơ bản:
+	\begin{verbatim}
+		Input:
+		ADDI R1, R0, 5
+		ADDI R2, R0, 10
+		ADD  R3, R1, R2
+		HALT
+		
+		Output:
+		1045
+		108A
+		0280
+		F000
+	\end{verbatim}
+	
+	Các lỗi cần được assembler phát hiện sớm gồm mnemonic không hợp lệ, sai số lượng toán hạng, register ngoài \texttt{R0}--\texttt{R7}, immediate vượt phạm vi, label chưa định nghĩa và địa chỉ jump vượt 12 bit. Việc kiểm tra lỗi ở tầng assembler giúp giảm thời gian debug waveform, vì file \texttt{.mem} đầu vào đã được đảm bảo đúng định dạng trước khi chạy simulation.
+	
+	\subsection{Quá trình xây dựng hệ thống}
+	\textbf{Người viết chính:} Cả nhóm, mỗi người viết phần mình.
+	
+	\subsubsection{Quy trình triển khai}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	Quá trình triển khai nên được trình bày theo thứ tự: chốt ISA và opcode, thiết kế interface module, code các module đơn lẻ, viết testbench module, tích hợp CPU pipeline, tích hợp cache và RAM, thêm hazard detection và forwarding, thêm branch/jump/flush, viết assembler, chạy test tích hợp, chụp waveform và đánh giá.
+	
+	\subsubsection{Xây dựng Datapath, ALU, Register File}
+	\textbf{Người viết:} Vũ Xuân Hải.
+	
+	Các module đã thực hiện: \texttt{alu.v}, \texttt{register\_file.v}, \texttt{immediate\_generator.v}, \texttt{mux.v}. Nội dung nên trình bày cách ALU xử lý từng phép toán, cách register file đọc/ghi, cách bảo vệ \texttt{R0}, cách immediate generator sign-extend/zero-extend, và testbench tương ứng như \texttt{alu\_tb.v}, \texttt{register\_file\_tb.v}.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Kết quả kiểm thử Datapath và Register File},
+		]{
+			colspec = {lll},
+			rowhead = 1,
+		}
+		\toprule
+		Module & Test & Kết quả \\
+		\midrule
+		ALU & ADD/SUB/AND/OR/SLT & Pass \\
+		ALU & zero/negative/overflow & Pass \\
+		Register File & Read/write & Pass \\
+		Register File & R0 luôn bằng 0 & Pass \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Xây dựng Cache, RAM và Memory Arbiter}
+	\textbf{Người viết:} Nguyễn Vũ Hoàng.
+	
+	Các module đã thực hiện: \texttt{direct\_mapped\_cache.v}, \texttt{cache\_controller.v}, \texttt{main\_memory.v}, \texttt{memory\_arbiter.v}. Cần mô tả FSM cache, RAM delay, và cơ chế arbiter ưu tiên MEM hơn IF.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Kết quả kiểm thử Cache, RAM và Arbiter},
+		]{
+			colspec = {lll},
+			rowhead = 1,
+		}
+		\toprule
+		Module & Test & Kết quả \\
+		\midrule
+		Main Memory & Delay và mem\_ready & Pass \\
+		Cache & Read hit & Pass \\
+		Cache & Read miss + refill & Pass \\
+		Cache & Write hit & Pass \\
+		Cache & Write miss & Pass \\
+		Arbiter & MEM ưu tiên IF & Pass \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Xây dựng Control, Pipeline và CPU Core}
+	\textbf{Người viết:} Nguyễn Nhật Phong.
+	
+	Các module đã thực hiện: \texttt{control\_unit.v}, \texttt{instruction\_decoder.v}, \texttt{pc\_unit.v}, \texttt{pipeline\_regs.v}, \texttt{hazard\_detection\_unit.v}, \texttt{forwarding\_unit.v}, \texttt{cpu\_core.v}, \texttt{cpu\_cache\_top.v}. Phần này cần mô tả cách PC hoạt động, cách decode instruction, cách sinh control signal, cách pipeline register truyền dữ liệu, cơ chế stall/flush/forwarding và cách tích hợp với cache.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Kết quả kiểm thử CPU Core và pipeline},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Chức năng & Kết quả \\
+		\midrule
+		Fetch instruction & Pass \\
+		Decode opcode/funct & Pass \\
+		Execute ALU instruction & Pass \\
+		Write-back register & Pass \\
+		Load/store & Pass \\
+		Stall cache miss & Pass \\
+		Load-use hazard & Pass \\
+		Branch/jump flush & Pass \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsubsection{Xây dựng Testbench, Assembler và Demo Program}
+	\textbf{Người viết:} Lê Hoàng Dũng.
+	
+	Phần verification được xây dựng quanh công cụ \texttt{tools/assembler.py}. Quy trình làm việc đề xuất là viết chương trình kiểm thử trong thư mục \texttt{asm/}, chạy assembler để sinh file \texttt{mem/}, sau đó nạp file \texttt{.mem} vào testbench tích hợp. Cách tổ chức này giúp các test arithmetic, load/store, cache, hazard và branch có thể được viết bằng assembly dễ đọc, đồng thời vẫn tạo ra input đúng định dạng cho \texttt{main\_memory}.
+	
+	\begin{verbatim}
+		python tools/assembler.py asm/program_05_full.asm mem/program_05_full.mem
+	\end{verbatim}
+	
+	Sau khi sinh file \texttt{.mem}, nhóm chạy simulation tích hợp để quan sát pipeline, register file, cache hit/miss, stall/flush và kết quả cuối cùng:
+	\begin{verbatim}
+		iverilog -o build/cpu_cache_tb.vvp \
+		rtl/cpu/*.v \
+		rtl/memory/*.v \
+		rtl/top/*.v \
+		tb/cpu_cache_tb.v
+		vvp build/cpu_cache_tb.vvp
+	\end{verbatim}
+	
+	Các module/file đã thực hiện hoặc cần duy trì đồng bộ gồm \texttt{tb/cpu\_cache\_tb.v}, \texttt{tb/alu\_tb.v}, \texttt{tb/register\_file\_tb.v}, \texttt{tb/cache\_tb.v}, \texttt{tools/assembler.py}, \texttt{asm/*.asm}, \texttt{mem/*.mem}, \texttt{sim/run.do} hoặc \texttt{Makefile}. Khi ISA thay đổi opcode, funct hoặc format lệnh, bảng mã trong assembler cần được cập nhật cùng lúc với \texttt{control\_unit}, \texttt{instruction\_decoder} và tài liệu ISA để tránh sai lệch giữa phần mềm tạo mã và phần cứng thực thi.
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Các demo program đề xuất},
+		]{
+			colspec = {lll},
+			rowhead = 1,
+		}
+		\toprule
+		Demo & Mục tiêu & Kết quả kỳ vọng \\
+		\midrule
+		Arithmetic & Test ADD/ADDI & R3 = 15 \\
+		Load/store & Test SW/LW & Memory và register đúng \\
+		Cache & Test miss/hit & Lần đầu miss, lần sau hit \\
+		Hazard & Test load-use & Không sai dữ liệu \\
+		Branch & Test BEQ/flush & R3 = 9 \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\section{Kết quả và bàn luận}
+	Phần này trình bày kết quả kiểm thử, waveform đề xuất và phân tích mức độ hoàn thành yêu cầu để chứng minh khả năng làm chủ phương pháp thiết kế, mô phỏng và kiểm chứng phần cứng số hiện đại.
+	\textbf{Người viết chính:} Lê Hoàng Dũng, phối hợp cả nhóm.
+	
+	\subsection{Chiến lược kiểm thử}
+	Chiến lược kiểm thử gồm hai cấp độ: kiểm thử module đơn lẻ và kiểm thử tích hợp. Ở mức module, các khối như ALU, register file, control unit, main memory, cache và arbiter được kiểm tra độc lập. Ở mức tích hợp, hệ thống \texttt{CPU core + arbiter + cache + RAM} được mô phỏng cùng các chương trình assembly hoàn chỉnh.
+	
+	\subsection{Testbench từng module}
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Danh sách testbench theo module},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Testbench & Mục tiêu \\
+		\midrule
+		\texttt{alu\_tb.v} & Test phép toán và flag \\
+		\texttt{register\_file\_tb.v} & Test read/write, reset, R0 \\
+		\texttt{control\_unit\_tb.v} & Test control signal \\
+		\texttt{main\_memory\_tb.v} & Test delay và mem\_ready \\
+		\texttt{cache\_tb.v} & Test hit/miss, refill, write-through \\
+		\texttt{memory\_arbiter\_tb.v} & Test ưu tiên MEM hơn IF \\
+		\texttt{cpu\_core\_tb.v} & Test pipeline core \\
+		\texttt{cpu\_cache\_tb.v} & Test tích hợp toàn hệ thống \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsection{Kiểm thử chương trình Assembly}
+	\textbf{Test 1: Arithmetic}
+	\begin{verbatim}
+		ADDI R1, R0, 5
+		ADDI R2, R0, 10
+		ADD  R3, R1, R2
+		HALT
+	\end{verbatim}
+	Kết quả kỳ vọng: \texttt{R1 = 5}, \texttt{R2 = 10}, \texttt{R3 = 15}.
+	
+	\textbf{Test 2: Load/Store}
+	\begin{verbatim}
+		ADDI R1, R0, 20
+		SW   R1, 0(R0)
+		LW   R2, 0(R0)
+		HALT
+	\end{verbatim}
+	Kết quả kỳ vọng: \texttt{Memory[0] = 20}, \texttt{R2 = 20}.
+	
+	\textbf{Test 3: Cache Hit/Miss}
+	\begin{verbatim}
+		LW R1, 10(R0)
+		LW R2, 10(R0)
+		HALT
+	\end{verbatim}
+	Kết quả kỳ vọng: lần \texttt{LW} đầu tiên là cache miss, lần thứ hai là cache hit.
+	
+	\textbf{Test 4: Load-use Hazard}
+	\begin{verbatim}
+		LW  R1, 0(R0)
+		ADD R2, R1, R1
+		HALT
+	\end{verbatim}
+	Kết quả kỳ vọng: CPU stall đúng và \texttt{R2 = R1 + R1}.
+	
+	\textbf{Test 5: Branch}
+	\begin{verbatim}
+		ADDI R1, R0, 5
+		ADDI R2, R0, 5
+		BEQ  R1, R2, TARGET
+		ADDI R3, R0, 1
+		TARGET:
+		ADDI R3, R0, 9
+		HALT
+	\end{verbatim}
+	Kết quả kỳ vọng: \texttt{R3 = 9}, instruction sai sau branch bị flush.
+	
+	\subsection{Waveform minh họa}
+	Waveform nên thể hiện rõ các nhóm tín hiệu quan trọng theo bảng sau:
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Các tín hiệu cần minh họa trên waveform},
+		]{
+			colspec = {ll},
+			rowhead = 1,
+		}
+		\toprule
+		Nhóm & Tín hiệu cần minh họa \\
+		\midrule
+		Pipeline & \texttt{pc}, \texttt{if\_id\_instr}, \texttt{id\_ex\_opcode}, \texttt{ex\_mem\_alu\_result}, \texttt{mem\_wb\_data} \\
+		Register & \texttt{reg\_write}, \texttt{write\_reg}, \texttt{write\_data} \\
+		Hazard & \texttt{stall}, \texttt{flush}, \texttt{forward\_a}, \texttt{forward\_b} \\
+		Memory & \texttt{mem\_req}, \texttt{mem\_we}, \texttt{mem\_addr}, \texttt{mem\_ready} \\
+		Cache & \texttt{cache\_hit}, \texttt{cache\_miss}, \texttt{cache\_state}, \texttt{valid}, \texttt{tag}, \texttt{index} \\
+		RAM & \texttt{ram\_req}, \texttt{ram\_ready}, \texttt{delay\_counter} \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	Mỗi waveform nên có tên test, tập tín hiệu quan trọng, phần giải thích 3--5 dòng và kết luận pass/fail.
+	
+	\subsection{Bảng tổng hợp kết quả kiểm thử}
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Bảng tổng hợp pass/fail},
+		]{
+			colspec = {c l l X X l},
+			width = \textwidth,
+			rowhead = 1,
+		}
+		\toprule
+		STT & Test case & Mục tiêu & Kết quả kỳ vọng & Kết quả thực tế & Đánh giá \\
+		\midrule
+		1 & ALU ADD & Kiểm tra cộng & Đúng kết quả & \dotfill & Pass \\
+		2 & Register R0 & R0 không đổi & R0 = 0 & \dotfill & Pass \\
+		3 & Cache miss & RAM refill cache & Miss rồi refill & \dotfill & Pass \\
+		4 & Load-use hazard & Stall pipeline & Không sai dữ liệu & \dotfill & Pass \\
+		5 & Branch flush & Xóa lệnh sai & R3 = 9 & \dotfill & Pass \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsection{Đánh giá hệ thống}
+	\textbf{Người viết chính:} Cả nhóm, tổng hợp bởi Nguyễn Nhật Phong.
+	
+	\subsubsection{Kết quả đạt được}
+	\begin{itemize}
+		\item Đã xây dựng CPU 16-bit.
+		\item Đã có 8 thanh ghi, \texttt{R0 = 0}.
+		\item Đã có pipeline 5 tầng.
+		\item Đã hỗ trợ các lệnh cơ bản.
+		\item Đã có unified direct-mapped cache.
+		\item Đã mô phỏng cache hit/miss.
+		\item Đã mô phỏng RAM delay.
+		\item Đã xử lý stall khi cache miss.
+		\item Đã xử lý load-use hazard.
+		\item Đã có forwarding cơ bản.
+		\item Đã có flush khi branch/jump.
+		\item Đã có assembler Python.
+		\item Đã có testbench và waveform.
+	\end{itemize}
+	
+	\subsubsection{Hạn chế}
+	Một số hạn chế hiện tại có thể bao gồm: ISA còn đơn giản, cache line size mới là 1 word, chưa có branch prediction, chưa hỗ trợ interrupt/exception, chưa tối ưu hiệu năng pipeline, chưa triển khai lên FPGA, chưa có cache nhiều cấp, và chưa có cơ chế write-back cache.
+	
+	\subsubsection{Hướng phát triển}
+	Các hướng phát triển đề xuất gồm: mở rộng ISA, thêm lệnh shift/logic/compare đầy đủ hơn, tăng số lượng register, tăng cache line size, thêm write-back cache, branch prediction, thống kê instruction/data, triển khai trên FPGA và xây dựng trình mô phỏng trực quan cho pipeline.
+	
+	\subsection{Kết luận}
+	\textbf{Người viết:} Cả nhóm, tổng hợp bởi Lê Hoàng Dũng.
+	
+	Thông qua đề tài, nhóm đã thiết kế và mô phỏng thành công một CPU 16-bit theo kiến trúc Von Neumann với pipeline 5 tầng và unified direct-mapped cache. Hệ thống có khả năng thực thi các lệnh cơ bản, xử lý load/store, branch/jump, cache hit/miss, stall, forwarding và flush. Ngoài ra, nhóm cũng xây dựng assembler Python và hệ thống testbench để kiểm chứng từng module cũng như toàn bộ hệ thống. Kết quả đạt được giúp nhóm hiểu rõ hơn về cách CPU thực thi lệnh, cách pipeline hoạt động và cách bộ nhớ cache ảnh hưởng đến hiệu năng hệ thống.
+	
+	
+	\section{Tài liệu tham khảo}
+	\begin{thebibliography}{99}
+		\bibitem{apaformat} American Psychological Association, ``Paper format,'' \textit{APA Style}. [Online]. Available: \url{https://apastyle.apa.org/style-grammar-guidelines/paper-format}. Accessed: May 13, 2026.
+		\bibitem{ieeestyle} University of Pittsburgh Library System, ``IEEE Style,'' \textit{Citation Help}. [Online]. Available: \url{https://pitt.libguides.com/citationhelp/ieee}. Accessed: May 13, 2026.
+		\bibitem{hennessy} J. L. Hennessy and D. A. Patterson, \textit{Computer Architecture: A Quantitative Approach}. Cambridge, MA, USA: Morgan Kaufmann, 2019.
+		\bibitem{patterson} D. A. Patterson and J. L. Hennessy, \textit{Computer Organization and Design RISC-V Edition}. Cambridge, MA, USA: Morgan Kaufmann, 2020.
+		\bibitem{vonneumann} J. von Neumann, \textit{First Draft of a Report on the EDVAC}. Moore School of Electrical Engineering, University of Pennsylvania, 1945. [Online]. Available: \url{https://library.si.edu/digital-library/book/firstdraftofrepo00vonn}. Accessed: May 15, 2026.
+		\bibitem{ieee1364} IEEE, \textit{IEEE Standard for Verilog Hardware Description Language}, IEEE Std. 1364-2005, 2006. [Online]. Available: \url{https://standards.ieee.org/ieee/1364/3641}. Accessed: May 15, 2026.
+	\end{thebibliography}
+	
+	\section{Phụ lục}
+	\textbf{Người phụ trách chính:} Lê Hoàng Dũng.
+	
+	\subsection{Cấu trúc thư mục project}
+	\begin{verbatim}
+		cpu_cache_project/
+		|
+		+-- rtl/
+		+-- tb/
+		+-- asm/
+		+-- mem/
+		+-- tools/
+		+-- sim/
+		+-- docs/
+		+-- README.md
+	\end{verbatim}
+	
+	\subsection{Lệnh mô phỏng}
+	\begin{verbatim}
+		iverilog -o build/alu_tb.vvp rtl/cpu/alu.v tb/alu_tb.v
+		vvp build/alu_tb.vvp
+		gtkwave wave/alu_tb.vcd
+	\end{verbatim}
+	
+	Test tích hợp:
+	\begin{verbatim}
+		python tools/assembler.py asm/program_05_full.asm mem/program_05_full.mem
+		iverilog -o build/cpu_cache_tb.vvp \
+		rtl/cpu/*.v \
+		rtl/memory/*.v \
+		rtl/top/*.v \
+		tb/cpu_cache_tb.v
+		vvp build/cpu_cache_tb.vvp
+		gtkwave wave/cpu_cache_tb.vcd
+	\end{verbatim}
+	
+	\subsection{Code quan trọng}
+	Nên đưa một số đoạn code đại diện cho ALU, control unit, cache FSM, hazard detection và assembler encode instruction; không nên đưa toàn bộ mã nguồn quá dài vào thân báo cáo.
+	
+	\begin{lstlisting}[caption={Example: 4-bit Verilog adder},label={lst:verilog-adder}]
+		module adder_4bit (
+		input  wire [3:0] a,
+		input  wire [3:0] b,
+		output wire [4:0] sum
+		);
+		assign sum = a + b;
+		endmodule
+	\end{lstlisting}
+	
+	\subsection{Gợi ý chia file trong thư mục docs/}
+	\begin{verbatim}
+		docs/
+		|
+		+-- 01_INTRODUCTION.md
+		+-- 02_THEORY_CPU_PIPELINE.md
+		+-- 03_ISA.md
+		+-- 04_DATAPATH_ALU.md
+		+-- 05_CONTROL_PIPELINE_HAZARD.md
+		+-- 06_CACHE_MEMORY.md
+		+-- 07_ASSEMBLER_TOOLING.md
+		+-- 08_VERIFICATION_TESTING.md
+		+-- 09_RESULT_EVALUATION.md
+		+-- 10_FINAL_REPORT.md
+	\end{verbatim}
+	
+	\begingroup
+	\centering
+	\begin{longtblr}[
+		caption = {Phân công file docs},
+		]{
+			colspec = {l l X},
+			width = \textwidth,
+			rowhead = 1,
+		}
+		\toprule
+		File docs & Người viết chính & Nội dung \\
+		\midrule
+		\texttt{01\_INTRODUCTION.md} & Nguyễn Nhật Phong & Giới thiệu, mục tiêu, phạm vi \\
+		\texttt{02\_THEORY\_CPU\_PIPELINE.md} & Nguyễn Nhật Phong & Von Neumann, pipeline, hazard \\
+		\texttt{03\_ISA.md} & Lê Hoàng Dũng & ISA, opcode, format lệnh, assembler mapping \\
+		\texttt{04\_DATAPATH\_ALU.md} & Vũ Xuân Hải & Datapath, ALU, register file, immediate, MUX \\
+		\texttt{05\_CONTROL\_PIPELINE\_HAZARD.md} & Nguyễn Nhật Phong & Control unit, PC, pipeline registers, forwarding, stall, flush \\
+		\texttt{06\_CACHE\_MEMORY.md} & Nguyễn Vũ Hoàng & Cache, RAM delay, memory arbiter, FSM \\
+		\texttt{07\_ASSEMBLER\_TOOLING.md} & Lê Hoàng Dũng & Assembler, file .asm, .mem, script mô phỏng \\
+		\texttt{08\_VERIFICATION\_TESTING.md} & Lê Hoàng Dũng & Testbench, demo program, waveform, pass/fail \\
+		\texttt{09\_RESULT\_EVALUATION.md} & Cả nhóm, Phong tổng hợp & Kết quả, hạn chế, hướng phát triển \\
+		\texttt{10\_FINAL\_REPORT.md} & Cả nhóm & Ghép báo cáo cuối \\
+		\bottomrule
+	\end{longtblr}
+	\endgroup
+	
+	\subsection{Checklist hoàn thành báo cáo}
+	Checklist dưới đây chia nhỏ từng phần để nhóm dễ theo dõi tiến độ, đánh dấu hoàn thành và phân công phần còn thiếu trước khi nộp bản cuối.
+	
+	\paragraph{Checklist chi tiết}
+	\begin{itemize}
+		\item \checkbox \textbf{Trang đầu.} Cập nhật tên đề tài, tên môn học, giảng viên hướng dẫn và thời gian --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Trang đầu.} Điền đầy đủ tên 4 thành viên nhóm --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Đóng góp.} Rà lại vai trò từng thành viên theo đúng phần đã thực hiện --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Đóng góp.} Bổ sung mức độ đóng góp hoặc ghi chú nếu giảng viên yêu cầu --- \textit{Cả nhóm}.
+		\item \checkedbox \textbf{Giới thiệu.} Hoàn thiện bối cảnh CPU pipeline và cache --- \textit{Lê Hoàng Dũng}.
+		\item \checkedbox \textbf{Giới thiệu.} Hoàn thiện mục tiêu đề tài theo yêu cầu project --- \textit{Lê Hoàng Dũng}.
+		\item \checkedbox \textbf{Giới thiệu.} Rà phạm vi thực hiện và các giới hạn không triển khai FPGA --- \textit{Lê Hoàng Dũng}.
+		\item \checkedbox \textbf{Lý thuyết.} Viết rõ kiến trúc Von Neumann và structural hazard --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Lý thuyết.} Hoàn thiện mô tả CPU 16-bit, register file và nhóm lệnh --- \textit{Nguyễn Nhật Phong, Vũ Xuân Hải}.
+		\item \checkbox \textbf{Lý thuyết.} Hoàn thiện mô tả pipeline 5 tầng IF, ID, EX, MEM, WB --- \textit{Nguyễn Nhật Phong}.
+		\item \checkedbox \textbf{ISA.} Chốt định dạng R-type, I-type và J-type --- \textit{Lê Hoàng Dũng}.
+		\item \checkedbox \textbf{ISA.} Chốt bảng opcode và bảng funct --- \textit{Lê Hoàng Dũng}.
+		\item \checkedbox \textbf{ISA.} Chốt quy ước assembly, branch, jump và HALT --- \textit{Lê Hoàng Dũng}.
+		\item \checkedbox \textbf{ISA.} Chốt cờ ALU và ví dụ mã hóa lệnh --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Datapath.} Viết chi tiết luồng dữ liệu qua từng stage --- \textit{Vũ Xuân Hải}.
+		\item \checkbox \textbf{Datapath.} Bổ sung mô tả ALU, phép toán và cờ trạng thái --- \textit{Vũ Xuân Hải}.
+		\item \checkbox \textbf{Datapath.} Bổ sung register file, luật \texttt{R0} và cơ chế đọc/ghi --- \textit{Vũ Xuân Hải}.
+		\item \checkbox \textbf{Datapath.} Rà immediate generator và các MUX trong datapath --- \textit{Vũ Xuân Hải}.
+		\item \checkbox \textbf{Control.} Hoàn thiện control unit và bảng control signal --- \textit{Nguyễn Nhật Phong}.
+		\item \checkbox \textbf{Control.} Hoàn thiện pipeline registers, stall, flush và bubble --- \textit{Nguyễn Nhật Phong}.
+		\item \checkbox \textbf{Control.} Hoàn thiện hazard detection cho load-use hazard --- \textit{Nguyễn Nhật Phong}.
+		\item \checkbox \textbf{Control.} Hoàn thiện forwarding unit và mã chọn forwarding --- \textit{Nguyễn Nhật Phong}.
+		\item \checkbox \textbf{Control.} Hoàn thiện xử lý branch/jump flush --- \textit{Nguyễn Nhật Phong}.
+		\item \checkbox \textbf{Memory.} Viết rõ memory arbiter và quy tắc MEM ưu tiên IF --- \textit{Nguyễn Vũ Hoàng}.
+		\item \checkbox \textbf{Memory.} Hoàn thiện direct-mapped cache, tag/index/valid/data array --- \textit{Nguyễn Vũ Hoàng}.
+		\item \checkbox \textbf{Memory.} Hoàn thiện chính sách write-through và no-write-allocate --- \textit{Nguyễn Vũ Hoàng}.
+		\item \checkbox \textbf{Memory.} Hoàn thiện main memory có delay và tín hiệu \texttt{ready} --- \textit{Nguyễn Vũ Hoàng}.
+		\item \checkbox \textbf{Interface.} Rà top-level \texttt{cpu\_cache\_top}, \texttt{halted}, \texttt{debug\_pc} --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Interface.} Rà IF logical port và MEM logical port của \texttt{cpu\_core} --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Interface.} Rà chuẩn tín hiệu \texttt{req/we/addr/wdata/rdata/ready} --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Tooling.} Hoàn thiện mô tả assembler Python và luồng \texttt{.asm} sang \texttt{.mem} --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Tooling.} Bổ sung ví dụ input/output assembler --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Kiểm thử.} Liệt kê testbench module đơn lẻ --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Kiểm thử.} Liệt kê test tích hợp CPU/cache/RAM --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Kiểm thử.} Bổ sung demo program arithmetic, load/store, cache, hazard, branch --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Kiểm thử.} Điền kết quả thực tế trong bảng pass/fail --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Kiểm thử.} Chèn hoặc mô tả waveform minh họa các tín hiệu chính --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Đánh giá.} Hoàn thiện kết quả đạt được --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Đánh giá.} Hoàn thiện hạn chế của thiết kế --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Đánh giá.} Hoàn thiện hướng phát triển --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Kết luận.} Rà kết luận bám sát mục tiêu đề tài --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Tài liệu.} Rà citation, bibliography và định dạng link --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Phụ lục.} Rà kế hoạch làm việc, cấu trúc thư mục và lệnh mô phỏng --- \textit{Lê Hoàng Dũng}.
+		\item \checkbox \textbf{Final check.} Biên dịch PDF không lỗi LaTeX --- \textit{Cả nhóm}.
+		\item \checkbox \textbf{Final check.} Rà mục lục, số bảng, caption và bố cục bảng --- \textit{Cả nhóm}.
+	\end{itemize}
+	
+	\subsection{Lưu ý khi viết báo cáo}
+	Nên viết báo cáo theo hướng mô tả quá trình phát triển hệ thống, không chỉ liệt kê module. Với mỗi phần, nên trả lời đủ bốn ý: mục đích của module/phần đó là gì, thiết kế hoạt động như thế nào, đã triển khai bằng file/module nào, và đã kiểm thử ra sao cùng kết quả thế nào.
+	
+	Ví dụ với cache: mục đích là giảm độ trễ truy cập bộ nhớ chính; thiết kế sử dụng unified direct-mapped cache gồm \texttt{valid array}, \texttt{tag array} và \texttt{data array}; triển khai bằng các module như \texttt{direct\_mapped\_cache.v}, \texttt{main\_memory.v}, \texttt{memory\_arbiter.v}; và kiểm thử bằng \texttt{cache\_tb.v} với các trường hợp read hit, read miss, write hit và write miss.
+	
+\end{document}

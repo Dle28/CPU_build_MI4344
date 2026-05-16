@@ -1,7 +1,8 @@
-// Placeholder memory image for program_04_hazard.asm.
-// Expected final behavior: load-use stall + ID/EX bubble.
 @0000
-0000
+1050
+2280
+0498
+06A0
 F000
 @0010
 0007
