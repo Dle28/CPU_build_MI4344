@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `include "cpu_defines.vh"
 
 module control_unit (
@@ -42,11 +43,14 @@ module control_unit (
                 reg_write = 1; // Cho phép ghi
                 // Giải mã ALU op dựa trên funct
                 case (funct)
-                    3'h0: alu_op = `ALU_ADD; 
+                    3'h0: alu_op = `ALU_ADD;
                     3'h1: alu_op = `ALU_SUB;
                     3'h2: alu_op = `ALU_AND;
                     3'h3: alu_op = `ALU_OR;
-                    3'h4: alu_op = `ALU_SLT;
+                    3'h4: alu_op = `ALU_XOR;  // XOR (bị sai trong phiên bản cũ)
+                    3'h5: alu_op = `ALU_SLT;
+                    3'h6: alu_op = `ALU_SLL;
+                    3'h7: alu_op = `ALU_SRL;
                     default: alu_op = `ALU_ADD;
                 endcase
             end

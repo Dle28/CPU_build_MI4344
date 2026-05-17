@@ -129,7 +129,7 @@ module register_file_tb;
         rst       = 1'b1;
 
         // Tạo waveform (nếu trình mô phỏng hỗ trợ)
-        $dumpfile("register_file_tb.vcd");
+        $dumpfile("build/register_file_tb.vcd");
         $dumpvars(0, register_file_tb);
 
         $display("=============================================================");

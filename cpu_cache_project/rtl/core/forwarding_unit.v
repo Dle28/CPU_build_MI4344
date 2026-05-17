@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `include "cpu_defines.vh"
 
 module forwarding_unit (

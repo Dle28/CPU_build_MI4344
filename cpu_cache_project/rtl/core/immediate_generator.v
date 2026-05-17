@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // ============================================================================
 // FILE: rtl/cpu/immediate_generator.v
 // CHỨC NĂNG: Khối kéo giãn hằng số 6-bit thành 16-bit (Zero/Sign Extension)

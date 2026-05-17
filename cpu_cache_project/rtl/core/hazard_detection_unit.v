@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `include "cpu_defines.vh"
 
 module hazard_detection_unit (
@@ -44,6 +45,6 @@ module hazard_detection_unit (
     // - Dính Load-Use Hazard: Phải chèn 1 bong bóng (bubble) vào thanh ghi ID/EX 
     //   để tách khoảng cách 2 lệnh ra.
     assign if_id_flush = branch_taken | jump;
-    assign id_ex_flush = load_use_hazard | branch_taken | jump;
+    assign id_ex_flush = load_use_hazard | branch_taken | jump | if_mem_conflict;
 
 endmodule

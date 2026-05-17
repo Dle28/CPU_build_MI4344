@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `include "cache_config.vh"
 
 module main_memory #(

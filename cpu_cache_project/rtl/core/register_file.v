@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // ============================================================================
 // FILE: rtl/cpu/register_file.v
 // CHỨC NĂNG: Tập thanh ghi 8x16-bit (Đọc bất đồng bộ, Ghi đồng bộ)

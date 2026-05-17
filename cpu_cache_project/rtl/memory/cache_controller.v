@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `include "cache_config.vh"
 
 module cache_controller (
@@ -35,7 +36,7 @@ module cache_controller (
                     else             next_state = `STATE_MISS_WRITE_REQ;
                 end
             end
-            `STATE_HIT_READ:        next_state = `STATE_DONE; 
+            `STATE_HIT_READ:        next_state = `STATE_IDLE; 
             `STATE_MISS_READ_REQ:   next_state = `STATE_MISS_READ_WAIT; 
             `STATE_MISS_READ_WAIT:  if (mem_ready) next_state = `STATE_REFILL;
             `STATE_REFILL:          next_state = `STATE_DONE; 

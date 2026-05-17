@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `include "cpu_defines.vh"
 
 module cpu_core (
@@ -101,7 +102,8 @@ module cpu_core (
     assign if_addr = if_pc;
 
     // Định nghĩa Cache Stall & Conflict
-    assign cache_stall = (if_req && !if_ready) || (mem_req && !mem_ready);
+    // Sửa lỗi Deadlock: Chỉ stall toàn Pipeline khi request ĐANG ĐƯỢC ƯU TIÊN bị miss.
+    assign cache_stall = mem_req ? !mem_ready : (if_req ? !if_ready : 1'b0);
     assign if_mem_conflict = mem_req && if_req;
     assign stall_out = pc_stall | if_id_stall | cache_stall;
 
@@ -111,6 +113,7 @@ module cpu_core (
     pc_unit u_pc (
         .clk(clk),
         .rst(rst),
+        .enable(start),           // PC chỉ tăng khi CPU đã được kích hoạt
         .stall(pc_stall | cache_stall), 
         .branch_taken(ex_branch_taken),
         .jump(id_jump), // Jump chốt ngay tại ID để tiết kiệm chu kỳ
@@ -185,8 +188,8 @@ module cpu_core (
     // Mạch định tuyến chọn đích ghi
     assign ex_write_reg = ex_reg_dst ? ex_rd : ex_rt;
     
-    // Mạch tính địa chỉ Branch
-    assign ex_branch_target = ex_pc + ex_imm16;
+    // Mạch tính địa chỉ Branch (PC hiện tại + 1 + offset)
+    assign ex_branch_target = ex_pc + 16'd1 + ex_imm16;
 
     // Mạch MUX Forwarding (Tích hợp cứng)
     assign alu_in_a = (forward_a == 2'b10) ? mem_alu_result_wire :
